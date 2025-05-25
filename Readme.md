@@ -1,3 +1,8 @@
+# Introducción
+
+Repositorio para el Proyecto final de la carrera de Analista en Informática Aplicada.
+El proyecto consiste en un sistema de gestión web para la administración de prácticas profesionales de los estudiantes de la facultad.
+
 # Instructivo
 
 ## Instalación
