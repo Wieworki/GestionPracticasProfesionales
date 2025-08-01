@@ -7,8 +7,12 @@ El proyecto consiste en un sistema de gestión web para la administración de pr
 
 ## Instalación
 
-docker build -t proyecto-facultad .    
+docker-compose up --build
 
-## Iniciar docker
+## Accesos
 
-docker run -p 8080:80 proyecto-facultad
+Laravel	http://localhost:8000
+Mailhog	http://localhost:8025
+Vite dev	http://localhost:5173
+PostgreSQL	localhost:5432 (internal: db)
+Redis	localhost:6379 (internal: redis)
