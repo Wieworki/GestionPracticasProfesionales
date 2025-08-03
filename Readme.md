@@ -9,6 +9,12 @@ El proyecto consiste en un sistema de gestión web para la administración de pr
 
 docker-compose up --build
 
+Levantamos el sistema: docker compose up -d 
+
+Corremos las migraciones: docker compose exec app php artisan migrate
+
+Corremos los seeds para cargar datos iniciales: docker compose exec app php artisan db:seed
+
 ## Accesos
 
 Laravel	http://localhost:8000
