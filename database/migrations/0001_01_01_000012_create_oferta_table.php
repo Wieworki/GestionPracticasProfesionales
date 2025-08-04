@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('estado');
             $table->string('modalidad');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
