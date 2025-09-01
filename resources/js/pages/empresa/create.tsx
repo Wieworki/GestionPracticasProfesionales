@@ -1,63 +1,46 @@
 import React from 'react';
 import { FormEventHandler } from 'react';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-
+import { Textarea } from '@/components/ui/textarea';
 import { LoaderCircle } from 'lucide-react';
-import { usePage } from '@inertiajs/react';
 import { Head, useForm } from '@inertiajs/react';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
+import TextareaError from '@/components/input-error';
 import AuthLayout from '@/layouts/auth-layout';
 
-type CreateUsuarioForm = {
+type CreateEmpresaForm = {
     nombre: string,
-    apellido: string,
+    cuit: string,
+    descripcion: string,
+    sitioweb: string,
     email: string;
     password: string;
     password_confirmation: string;
-    tipo_usuario: string,
-};
-
-type TipoUsuario = {
-    id: number;
-    nombre: string;
-};
-
-type PageProps  = {
-    tiposUsuario: TipoUsuario[];
 };
 
 export default function Home() {
 
-    const { tiposUsuario } = usePage<PageProps>().props;
-
-    const { data, setData, post, processing, errors, reset } = useForm<Required<CreateUsuarioForm>>({
+    const { data, setData, post, processing, errors, reset } = useForm<Required<CreateEmpresaForm>>({
         nombre: '',
-        apellido: '',
+        cuit: '',
+        descripcion: '',
+        sitioweb: '',
         email: '',
         password: '',
         password_confirmation: '',
-        tipo_usuario: ''
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('storeUsuario'));
+        post(route('storeEmpresa'));
     };
 
     return (
 
-            <AuthLayout title="Nuevo usuario" description="Formulario de creacion de nuevo usuario">
-                <Head title="Nuevo usuario" />
+            <AuthLayout title="Nueva empresa" description="Formulario de creacion de nuevo usuario empresa">
+                <Head title="Nueva empresa" />
 
                 <form className="flex flex-col gap-6" onSubmit={submit}>
                     <div className="grid gap-6">
@@ -79,20 +62,51 @@ export default function Home() {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="apellido">Apellido</Label>
+                            <Label htmlFor="cuit">Cuit</Label>
                             <Input
-                                id="apellido"
+                                id="cuit"
                                 type="text"
                                 required
                                 autoFocus
-                                tabIndex={2}
-                                autoComplete="Apellido"
-                                value={data.apellido}
-                                onChange={(e) => setData('apellido', e.target.value)}
+                                tabIndex={1}
+                                autoComplete="cuit"
+                                value={data.cuit}
+                                onChange={(e) => setData('cuit', e.target.value)}
                                 disabled={processing}
-                                placeholder="Apellido"
+                                placeholder="xx-xxxxxxxx-x"
                             />
-                            <InputError message={errors.apellido} className="mt-2" />
+                            <InputError message={errors.cuit} className="mt-2" />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="descripcion">Descripcion</Label>
+                            <Textarea
+                                id="descripcion"
+                                autoFocus
+                                tabIndex={1}
+                                autoComplete="descripcion"
+                                value={data.descripcion}
+                                onChange={(e) => setData('descripcion', e.target.value)}
+                                disabled={processing}
+                                placeholder="Empresa especializada en el desarrollo de..."
+                            />
+                            <TextareaError message={errors.descripcion} className="mt-2" />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="cuit">Sitio Web</Label>
+                            <Input
+                                id="sitioweb"
+                                type="text"
+                                autoFocus
+                                tabIndex={1}
+                                autoComplete="sitioweb"
+                                value={data.sitioweb}
+                                onChange={(e) => setData('sitioweb', e.target.value)}
+                                disabled={processing}
+                                placeholder="www.ejemplo.com"
+                            />
+                            <InputError message={errors.sitioweb} className="mt-2" />
                         </div>
 
                         <div className="grid gap-2">
@@ -143,32 +157,9 @@ export default function Home() {
                             <InputError message={errors.password_confirmation} />
                         </div>
 
-                        <div>
-                            <Label htmlFor="tipo">Tipo de usuario</Label>
-                            <Select 
-                                value={data.tipo_usuario} 
-                                name="tipo"
-                                onValueChange={(value) => setData('tipo_usuario', value)}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Seleccione un tipo" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {tiposUsuario.map((tipo) => (
-                                    <SelectItem key={tipo.id} value={String(tipo.id)}>
-                                        {tipo.nombre}
-                                    </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {errors.tipo_usuario && (
-                                <div className="text-red-500">{errors.tipo_usuario}</div>
-                            )}
-                        </div>
-
                         <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                            Crear usuario
+                            Crear empresa
                         </Button>
                     </div>
 

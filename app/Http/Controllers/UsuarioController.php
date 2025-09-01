@@ -30,7 +30,7 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * TODO: Cambiar, usar el repository para crear el usuario
      */
     public function store(StoreUsuarioRequest $request)
     {
@@ -40,8 +40,6 @@ class UsuarioController extends Controller
             'email' => 'required|email:rfc,dns',
             'password' => 'required|max:255',
         ]);
-
-        Log::error("TIPO USUARIO: " . $request->tipo_usuario);
 
         $usuario = Usuario::create([
             'nombre' => $request->nombre,
