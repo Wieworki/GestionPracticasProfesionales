@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TipoUsuarioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\EstudianteController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -19,6 +20,10 @@ Route::post('/admin/usuario/store', [UsuarioController::class, 'store'])->name('
 Route::get('/admin/empresa/index', [EmpresaController::class, 'index'])->name('homeEmpresa');
 Route::get('/admin/empresa/create', [EmpresaController::class, 'create'])->name('createEmpresa');
 Route::post('/admin/empresa/store', [EmpresaController::class, 'store'])->name('storeEmpresa');
+
+Route::get('/admin/estudiante/index', [EstudianteController::class, 'index'])->name('homeEstudiante');
+Route::get('/admin/estudiante/create', [EstudianteController::class, 'create'])->name('createEstudiante');
+Route::post('/admin/estudiante/store', [EstudianteController::class, 'store'])->name('storeEstudiante');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

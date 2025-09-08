@@ -4,7 +4,7 @@ export default function Home() {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <h1>Welcome to SHOW EMPRESA + Inertia + React + Vite!</h1>
+            <h1>Welcome to SHOW ESTUDIANTE + Inertia + React + Vite!</h1>
             <p>This is your basic home page powered by Inertia.</p>
 
             

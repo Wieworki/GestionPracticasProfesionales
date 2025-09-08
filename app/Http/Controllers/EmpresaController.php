@@ -6,7 +6,6 @@ use App\Models\Empresa;
 use App\Http\Requests\StoreEmpresaRequest;
 use App\Http\Requests\UpdateEmpresaRequest;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Hash;
 use App\Services\EmpresaService;
 
 class EmpresaController extends Controller
