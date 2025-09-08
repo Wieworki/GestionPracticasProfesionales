@@ -39,7 +39,7 @@ class EstudianteController extends Controller
      */
     public function store(StoreEstudianteRequest $request)
     {
-        $userData = $request->only(['nombre', 'email', 'password']);
+        $userData = $request->only(['nombre', 'apellido', 'email', 'password']);
         $estudianteData = $request->only(['dni']);
         $estudiante = $this->estudianteService->createEstudianteWithUser($userData, $estudianteData);
 

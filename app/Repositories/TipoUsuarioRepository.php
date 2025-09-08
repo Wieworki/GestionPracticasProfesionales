@@ -16,4 +16,9 @@ class TipoUsuarioRepository
     {
         return TipoUsuario::where('nombre', 'estudiante')->first();
     }
+
+    public function getTipoAdministrativo(): ?TipoUsuario
+    {
+        return TipoUsuario::where('nombre', 'administrativo')->first();
+    }
 }
