@@ -14,7 +14,7 @@ type PageProps = {
 };
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth } = usePage<SharedData>().props;   // No need to manually set the auth user from the controller
     const { faq } = usePage<PageProps>().props;
 
     return (
@@ -27,12 +27,21 @@ export default function Welcome() {
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     <nav className="flex items-center justify-end gap-4">
                         {auth.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                            >
-                                Dashboard
-                            </Link>
+                            <>
+                                <Link
+                                    href={route('dashboard')}
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    Acceso al sistema
+                                </Link>
+                                <Link
+                                    href={route('logout')}
+                                    method="post"
+                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                >
+                                    Salir
+                                </Link>
+                            </>
                         ) : (
                             <>
                                 <Link
