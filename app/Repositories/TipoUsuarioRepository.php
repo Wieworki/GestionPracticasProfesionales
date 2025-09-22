@@ -7,6 +7,11 @@ use App\Models\TipoUsuario;
 class TipoUsuarioRepository
 {
 
+    public function getTipoAdmin(): ?TipoUsuario
+    {
+        return TipoUsuario::where('nombre', 'admin')->first();
+    }
+
     public function getTipoEmpresa(): ?TipoUsuario
     {
         return TipoUsuario::where('nombre', 'empresa')->first();

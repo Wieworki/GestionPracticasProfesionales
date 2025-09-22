@@ -1,13 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TipoUsuarioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\AdministrativoController;
+use App\Http\Controllers\Dashboard\DashboardRedirectController;
+use App\Http\Controllers\Dashboard\EmpresaDashboardController;
+use App\Http\Controllers\Dashboard\AdministrativoDashboardController;
+use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -31,9 +34,10 @@ Route::get('/admin/administrativo/create', [AdministrativoController::class, 'cr
 Route::post('/admin/administrativo/store', [AdministrativoController::class, 'store'])->name('storeAdministrativo');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', DashboardRedirectController::class)->name('dashboard');    // This calls the functin "__invoke" of the class
+    Route::get('/dashboard/empresa', [EmpresaDashboardController::class, 'index'])->name('empresa.dashboard');
+    Route::get('/dashboard/administrativo', [AdministrativoDashboardController::class, 'index'])->name('administrativo.dashboard');
+    Route::get('/dashboard/estudiante', [EstudianteDashboardController::class, 'index'])->name('estudiante.dashboard');
 });
 
 require __DIR__.'/settings.php';
