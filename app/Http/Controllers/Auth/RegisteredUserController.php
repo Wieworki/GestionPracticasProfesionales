@@ -3,49 +3,69 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\StoreEstudianteRequest;
+use App\Http\Requests\StoreEmpresaRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Services\EstudianteService;
+use App\Services\EmpresaService;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Show the registration page.
-     */
-    public function create(): Response
+
+    protected $estudianteService;
+    protected $empresaService;
+
+    public function __construct(
+        EstudianteService $estudianteService, EmpresaService $empresaService
+        )
     {
-        return Inertia::render('auth/register');
+        $this->estudianteService = $estudianteService;
+        $this->empresaService = $empresaService;
     }
 
     /**
-     * Handle an incoming registration request.
+     * Show the registration page for guests
+     */
+    public function create(): Response
+    {
+        return Inertia::render('auth/registro/index');
+    }
+
+    /**
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function storeEstudiante(StoreEstudianteRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $userData = $request->only(['nombre', 'apellido', 'email', 'password']);
+        $estudianteData = $request->only(['dni']);
+        $estudiante = $this->estudianteService->createEstudianteWithUser($userData, $estudianteData);
+        
+        Auth::login($estudiante->usuario);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Cuenta creada con éxito');
+    }
 
-        event(new Registered($user));
+    /**
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function storeEmpresa(StoreEmpresaRequest $request): RedirectResponse
+    {
+        $userData = $request->only(['nombre', 'email', 'password']);
+        $empresaData = $request->only(['cuit', 'descripcion', 'sitioweb']);
+        $empresa = $this->empresaService->createEmpresaWithUser($userData, $empresaData);
+        
+        Auth::login($empresa->usuario);
 
-        Auth::login($user);
-
-        return to_route('dashboard');
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Cuenta creada con éxito');
     }
 }

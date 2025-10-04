@@ -44,7 +44,7 @@ export default function FaqItem({ id, titulo, descripcion }: FaqItemProps) {
         </svg>
       </div>
 
-    {/* Short circuit code, used for conditional rendering */}
+      {/* Short circuit code, used for conditional rendering */}
       {open && (
         <div className="ml-4 text-sm text-[#706f6c] dark:text-[#A1A09A]">
           {descripcion}

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Empresa extends Model
 {
@@ -23,4 +24,9 @@ class Empresa extends Model
         'sitio_web',
         'descripcion'
     ];
+
+    public function usuario(): HasOne
+    {
+        return $this->hasOne(Usuario::class, 'id', 'usuario_id');
+    }
 }

@@ -22,7 +22,19 @@ class StoreEstudianteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => ['required', 'string', 'max:255'],
+            'apellido' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:usuario,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'], // 'confirmed' => needs password_confirmation field
+            'dni' => ['required', 'string', 'max:20', 'unique:estudiante,dni'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.unique' => 'Este correo ya está en uso.',
+            'dni.unique' => 'Este DNI ya está registrado.',
         ];
     }
 }
