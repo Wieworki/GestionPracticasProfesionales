@@ -39,7 +39,7 @@ export default function RegistroEstudiante({ onClose }: RegistroEstudianteProps)
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('registerEstudiante'), {
+        post(route('register.estudiante'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };

@@ -37,7 +37,7 @@ export default function RegistroEmpresa({ onClose }: RegistroEmpresaProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('registerEmpresa'), {
+        post(route('register.empresa'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };

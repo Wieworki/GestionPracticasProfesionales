@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Usuario;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Estudiante>
@@ -17,7 +18,10 @@ class EstudianteFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'dni' => fake()->numerify('########'),
+            'usuario_id' => function () {
+                return Usuario::factory()->create()->id;
+            }
         ];
     }
 }
