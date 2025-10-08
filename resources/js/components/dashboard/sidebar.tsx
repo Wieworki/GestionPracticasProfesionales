@@ -1,17 +1,20 @@
 import React from 'react';
 import SidebarItem from '@/components/dashboard/sidebarItem';
+import { NavItem } from '@/Types';
+import { Link, router } from "@inertiajs/react";
+import { LogOut } from "lucide-react";
+import { Button } from '@/components/ui/button';
 
 interface Props {
     nombre?: string;
-    habilitado: boolean;
+    navItems: NavItem[];
 }
 
-export default function Sidebar({ nombre, habilitado }: Props) {
-    const navItems = [
-        { label: 'Mis Datos', href: '/empresa/perfil', habilitado: true },      // La opcion de "mis datos" esta disponible aun si el usuario no esta habilitado
-        { label: 'Nueva Oferta', href: '/empresa/ofertas/crear' },
-        { label: 'Mis Ofertas', href: '/empresa/ofertas' },
-    ];
+export default function Sidebar({ nombre, navItems }: Props) {
+
+    const handleLogout = () => {
+        router.post(route("logout"));
+    };
 
     return (
         <aside className="w-64 bg-white shadow-md border-r border-gray-200 flex flex-col">
@@ -22,8 +25,20 @@ export default function Sidebar({ nombre, habilitado }: Props) {
             </div>
             <nav className="flex-1 p-4 space-y-2">
                 {navItems.map((item) => (
-                    <SidebarItem label={item.label} href={item.href} habilitado={item.habilitado || habilitado}  />
+                    <SidebarItem label={item.label} href={item.href} habilitado={item.isEnabled} key={item.href}  />
                 ))}
+
+                {/* Separador visual */}
+                <div className="border-t p-4">
+                    <Button
+                        variant="outline"
+                        className="w-full flex items-center justify-center gap-2 text-red-600 border-red-400 hover:bg-red-100"
+                        onClick={handleLogout}
+                    >
+                        <LogOut size={18} />
+                        Salir
+                    </Button>
+                </div>
             </nav>
         </aside>
     );

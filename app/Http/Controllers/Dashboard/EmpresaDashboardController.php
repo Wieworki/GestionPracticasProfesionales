@@ -17,7 +17,7 @@ class EmpresaDashboardController extends Controller
         return Inertia::render('empresa/dashboard', [
             'empresa' => [
                 'nombre' => $empresa->nombre,
-                'habilitado' => (bool) true
+                'habilitado' => (bool) $empresa->habilitado
             ],
             'mensajeBienvenida' => $mensajeBienvenida
         ]);
