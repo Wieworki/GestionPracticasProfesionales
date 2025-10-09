@@ -27,19 +27,19 @@ export default function Sidebar({ nombre, navItems }: Props) {
                 {navItems.map((item) => (
                     <SidebarItem label={item.label} href={item.href} habilitado={item.isEnabled} key={item.href}  />
                 ))}
-
-                {/* Separador visual */}
-                <div className="border-t p-4">
-                    <Button
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2 text-red-600 border-red-400 hover:bg-red-100"
-                        onClick={handleLogout}
-                    >
-                        <LogOut size={18} />
-                        Salir
-                    </Button>
-                </div>
             </nav>
+
+            <div className="border-t p-4">
+                <Button
+                    variant="outline"
+                    className="w-full flex items-center justify-center gap-2 text-red-600 border-red-400 hover:bg-red-100"
+                    onClick={handleLogout}
+                >
+                    <LogOut size={18} />
+                    Salir
+                </Button>
+            </div>
+
         </aside>
     );
 }

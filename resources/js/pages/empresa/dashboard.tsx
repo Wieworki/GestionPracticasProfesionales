@@ -2,6 +2,8 @@ import React from 'react';
 import EmpresaLayout from '@/layouts/dashboard/EmpresaLayout';
 import DisabledAccountNotice from '@/components/dashboard/disabledAccountNotice';
 import WelcomeCard from '@/components/dashboard/welcomeCard';
+import { Link } from '@inertiajs/react';
+import { FileText } from 'lucide-react';
 
 interface Props {
     empresa: {
@@ -12,45 +14,66 @@ interface Props {
 }
 
 export default function Dashboard({ empresa, mensajeBienvenida }: Props) {
+    const { nombre, habilitado } = empresa;
+
+    const features = [
+        {
+            title: 'Crear nueva oferta',
+            description: 'Publicá una nueva práctica profesional y encontrá estudiantes interesados.',
+            href: '/empresa/ofertas/crear',
+            icon: <FileText className="text-blue-600 w-6 h-6" />,
+        },
+        {
+            title: 'Gestionar mis ofertas',
+            description: 'Editá o eliminá tus ofertas activas y revisá las postulaciones.',
+            href: '/empresa/ofertas',
+            icon: <FileText className="text-blue-600 w-6 h-6" />,
+        },
+    ];
+
     return (
-        <EmpresaLayout nombre={empresa.nombre} habilitado={empresa.habilitado}>
+        <EmpresaLayout nombre={nombre} habilitado={habilitado}>
             <div className="space-y-6">
-                {!empresa.habilitado && <DisabledAccountNotice />}
+                {!habilitado && <DisabledAccountNotice />}
 
-                <WelcomeCard nombreUsuario={empresa.nombre} mensaje={mensajeBienvenida} />
+                <WelcomeCard nombreUsuario={nombre} mensaje={mensajeBienvenida} />
 
-                {empresa.habilitado && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-                            <h2 className="text-lg font-semibold mb-2 text-blue-700">
-                                Crear nueva oferta
-                            </h2>
-                            <p className="text-gray-600 mb-4">
-                                Publicá una nueva práctica profesional y encontrá estudiantes interesados.
-                            </p>
-                            <a
-                                href="/empresa/ofertas/crear"
-                                className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                            >
-                                Crear oferta
-                            </a>
+                {habilitado && (
+                    <section>
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                            Panel de gestión
+                        </h2>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {features.map((item) => (
+                                <div
+                                    key={item.href}
+                                    className="group bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+                                >
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-3 bg-blue-50 rounded-full">
+                                                {item.icon}
+                                            </div>
+                                            <h3 className="text-lg font-semibold text-gray-800">
+                                                {item.title}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-600 text-sm mb-5">
+                                        {item.description}
+                                    </p>
+                                    <Link
+                                        href={item.href}
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 transition"
+                                    >
+                                        Ir
+                                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                    </Link>
+                                </div>
+                            ))}
                         </div>
-
-                        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-                            <h2 className="text-lg font-semibold mb-2 text-blue-700">
-                                Gestionar mis ofertas
-                            </h2>
-                            <p className="text-gray-600 mb-4">
-                                Editá o eliminá tus ofertas activas y revisá las postulaciones.
-                            </p>
-                            <a
-                                href="/empresa/ofertas"
-                                className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                            >
-                                Ver ofertas
-                            </a>
-                        </div>
-                    </div>
+                    </section>
                 )}
             </div>
         </EmpresaLayout>

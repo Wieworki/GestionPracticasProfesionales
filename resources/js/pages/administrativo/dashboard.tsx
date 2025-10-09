@@ -1,39 +1,51 @@
 import React from 'react';
-import EstudianteLayout from '@/layouts/dashboard/EstudianteLayout';
+import AdministrativoLayout from '@/layouts/dashboard/AdministrativoLayout';
 import DisabledAccountNotice from '@/components/dashboard/disabledAccountNotice';
 import WelcomeCard from '@/components/dashboard/welcomeCard';
 import { Link } from '@inertiajs/react';
-import { Building2, FileText } from 'lucide-react';
+import { Building2, Users, FileText, UserPlus } from 'lucide-react';
 
 interface Props {
-    estudiante: {
+    administrativo: {
         nombre: string;
         habilitado: boolean;
     };
     mensajeBienvenida: string;
 }
 
-export default function Dashboard({ estudiante, mensajeBienvenida }: Props) {
-    const { nombre, habilitado } = estudiante;
+export default function Dashboard({ administrativo, mensajeBienvenida }: Props) {
+    const { nombre, habilitado } = administrativo;
 
     const features = [
         {
             title: 'Ver ofertas',
-            description: 'Ir al listado de ofertas de práctica profesional disponibles.',
-            href: '/estudiante/ofertas',
+            description: 'Explorá y gestioná las ofertas de prácticas profesionales creadas en el sistema.',
+            href: '/administrativo/ofertas',
             icon: <FileText className="text-blue-600 w-6 h-6" />,
         },
         {
-            title: 'Postulaciones hechas',
-            description: 'Gestion de las postulaciones hechas.',
-            href: '/estudiante/postulaciones',
+            title: 'Empresas registradas',
+            description: 'Accedé al listado completo de empresas registradas.',
+            href: '/administrativo/empresas',
             icon: <Building2 className="text-blue-600 w-6 h-6" />,
+        },
+        {
+            title: 'Estudiantes registrados',
+            description: 'Consultá y gestioná la información de los estudiantes registrados.',
+            href: '/administrativo/estudiantes',
+            icon: <Users className="text-blue-600 w-6 h-6" />,
+        },
+        {
+            title: 'Administracion',
+            description: 'Acceder a las opciones de administracion.',
+            href: '/administrativo/administracion',
+            icon: <UserPlus className="text-blue-600 w-6 h-6" />,
         },
     ];
 
     return (
-        <EstudianteLayout nombre={nombre} habilitado={habilitado}>
-            <div className="space-y-6">
+        <AdministrativoLayout nombre={nombre} habilitado={habilitado}>
+            <div className="space-y-8 animate-fadeIn">
                 {!habilitado && <DisabledAccountNotice />}
 
                 <WelcomeCard nombreUsuario={nombre} mensaje={mensajeBienvenida} />
@@ -76,6 +88,6 @@ export default function Dashboard({ estudiante, mensajeBienvenida }: Props) {
                     </section>
                 )}
             </div>
-        </EstudianteLayout>
+        </AdministrativoLayout>
     );
 }
