@@ -7,6 +7,8 @@ use App\Http\Requests\StoreEmpresaRequest;
 use App\Http\Requests\UpdateEmpresaRequest;
 use Inertia\Inertia;
 use App\Services\EmpresaService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class EmpresaController extends Controller
 {
@@ -54,20 +56,31 @@ class EmpresaController extends Controller
         return Inertia::render('empresa/show', ['empresa' => $empresa->id]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Empresa $empresa)
+    public function edit()
     {
-        //
+        $empresa = Auth::user()->empresa;
+        return Inertia::render('empresa/Edit', [
+            'empresa' => [
+                'nombre' => $empresa->usuario->nombre,
+                'email' => $empresa->usuario->email,
+                'cuit' => $empresa->cuit,
+                'descripcion' => $empresa->descripcion,
+                'sitio_web' => $empresa->sitio_web,
+            ]
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateEmpresaRequest $request, Empresa $empresa)
+    public function update(UpdateEmpresaRequest $request): RedirectResponse
     {
-        //
+        $user = Auth::user();
+        $empresa = $user->empresa;
+
+        $user->update($request->only(['nombre', 'email']));
+        $empresa->update($request->only(['cuit', 'descripcion', 'sitio_web']));
+
+        return redirect()
+            ->route('empresa.perfil')
+            ->with('success', 'Datos actualizados correctamente.');
     }
 
     /**
