@@ -41,7 +41,7 @@ class RegisteredUserController extends Controller
      */
     public function storeEstudiante(StoreEstudianteRequest $request): RedirectResponse
     {
-        $userData = $request->only(['nombre', 'apellido', 'email', 'password']);
+        $userData = $request->only(['nombre', 'apellido', 'email', 'telefono', 'password']);
         $estudianteData = $request->only(['dni']);
         $estudiante = $this->estudianteService->createEstudianteWithUser($userData, $estudianteData);
         
@@ -58,8 +58,8 @@ class RegisteredUserController extends Controller
      */
     public function storeEmpresa(StoreEmpresaRequest $request): RedirectResponse
     {
-        $userData = $request->only(['nombre', 'email', 'password']);
-        $empresaData = $request->only(['cuit', 'descripcion', 'sitioweb']);
+        $userData = $request->only(['nombre', 'email', 'password', 'telefono']);
+        $empresaData = $request->only(['cuit', 'descripcion', 'sitio_web']);
         $empresa = $this->empresaService->createEmpresaWithUser($userData, $empresaData);
         
         Auth::login($empresa->usuario);

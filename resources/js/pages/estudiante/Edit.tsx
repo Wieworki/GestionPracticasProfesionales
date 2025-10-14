@@ -1,40 +1,38 @@
 import React from "react";
 import { useForm, Head, Link } from "@inertiajs/react";
-import EmpresaLayout from "@/layouts/dashboard/EmpresaLayout";
+import EstudianteLayout from "@/layouts/dashboard/EstudianteLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import InputError from '@/components/input-error';
 
-interface EmpresaProps {
-    empresa: {
+interface EstudianteProps {
+    estudiante: {
         nombre: string;
+        apellido: string;
         email: string;
-        cuit: string;
-        descripcion: string;
-        sitio_web: string;
+        dni: string;
         telefono: string;
     };
 }
 
-export default function Edit({ empresa }: EmpresaProps) {
+export default function Edit({ estudiante }: EstudianteProps) {
     const { data, setData, patch, processing, errors } = useForm({
-        nombre: empresa.nombre || "",
-        email: empresa.email || "",
-        cuit: empresa.cuit || "",
-        descripcion: empresa.descripcion || "",
-        sitio_web: empresa.sitio_web || "",
-        telefono: empresa.telefono || "",
+        nombre: estudiante.nombre || "",
+        apellido: estudiante.apellido || "",
+        email: estudiante.email || "",
+        dni: estudiante.dni || "",
+        telefono: estudiante.telefono || "",
     });
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch(route("empresa.update"));
+        patch(route("estudiante.update"));
     };
 
     return (
-        <EmpresaLayout nombre={empresa.nombre}>
-            <Head title="Modificar Datos - Empresa" />
+        <EstudianteLayout nombre={estudiante.nombre}>
+            <Head title="Modificar Datos - Estudiante" />
             <div className="max-w-3xl mx-auto bg-white shadow rounded-xl p-8">
                 <h1 className="text-2xl font-semibold text-blue-700 mb-6">
                     Modificar datos
@@ -52,6 +50,16 @@ export default function Edit({ empresa }: EmpresaProps) {
                     </div>
 
                     <div>
+                        <Label htmlFor="apellido">Apellido</Label>
+                        <Input
+                            id="apellido"
+                            value={data.apellido}
+                            onChange={(e) => setData("apellido", e.target.value)}
+                        />
+                        <InputError message={errors.apellido} />
+                    </div>
+
+                    <div>
                         <Label htmlFor="email">Email</Label>
                         <Input
                             id="email"
@@ -63,13 +71,13 @@ export default function Edit({ empresa }: EmpresaProps) {
                     </div>
 
                     <div>
-                        <Label htmlFor="cuit">CUIT</Label>
+                        <Label htmlFor="dni">DNI</Label>
                         <Input
-                            id="cuit"
-                            value={data.cuit}
-                            onChange={(e) => setData("cuit", e.target.value)}
+                            id="dni"
+                            value={data.dni}
+                            onChange={(e) => setData("dni", e.target.value)}
                         />
-                        <InputError message={errors.cuit} />
+                        <InputError message={errors.dni} />
                     </div>
 
                     <div>
@@ -82,29 +90,9 @@ export default function Edit({ empresa }: EmpresaProps) {
                         <InputError message={errors.telefono} />
                     </div>
 
-                    <div>
-                        <Label htmlFor="descripcion">Descripción</Label>
-                        <Input
-                            id="descripcion"
-                            value={data.descripcion}
-                            onChange={(e) => setData("descripcion", e.target.value)}
-                        />
-                        <InputError message={errors.descripcion} />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="sitio_web">Sitio Web</Label>
-                        <Input
-                            id="sitio_web"
-                            value={data.sitio_web}
-                            onChange={(e) => setData("sitio_web", e.target.value)}
-                        />
-                        <InputError message={errors.sitio_web} />
-                    </div>
-
                     <div className="flex justify-between pt-6">
                         <Link
-                            href={route("empresa.perfil")}
+                            href={route("estudiante.perfil")}
                             className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
                         >
                             Volver
@@ -121,6 +109,6 @@ export default function Edit({ empresa }: EmpresaProps) {
                     </div>
                 </form>
             </div>
-        </EmpresaLayout>
+        </EstudianteLayout>
     );
 }

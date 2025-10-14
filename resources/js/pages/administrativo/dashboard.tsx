@@ -44,7 +44,7 @@ export default function Dashboard({ administrativo, mensajeBienvenida }: Props) 
     ];
 
     return (
-        <AdministrativoLayout nombre={nombre} habilitado={habilitado}>
+        <AdministrativoLayout nombre={nombre}>
             <div className="space-y-8 animate-fadeIn">
                 {!habilitado && <DisabledAccountNotice />}
 

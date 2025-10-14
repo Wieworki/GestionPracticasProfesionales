@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\EmpresaDashboardController;
 use App\Http\Controllers\Dashboard\AdministrativoDashboardController;
 use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 use App\Http\Controllers\Empresa\PerfilController as EmpresaPerfil;
+use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -37,13 +38,19 @@ Route::post('/admin/administrativo/store', [AdministrativoController::class, 'st
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardRedirectController::class)->name('dashboard');    // This calls the functin "__invoke" of the class
     Route::get('/dashboard/administrativo', [AdministrativoDashboardController::class, 'index'])->name('administrativo.dashboard');
-    Route::get('/dashboard/estudiante', [EstudianteDashboardController::class, 'index'])->name('estudiante.dashboard');
 
     Route::middleware('checkUserType:empresa')->group(function () {
         Route::get('/empresa/perfil', [EmpresaPerfil::class, 'index'])->name('empresa.perfil');
         Route::get('/empresa/dashboard', [EmpresaDashboardController::class, 'index'])->name('empresa.dashboard');
         Route::get('/empresa/perfil/edit', [EmpresaController::class, 'edit'])->name('empresa.edit');
         Route::patch('/empresa/perfil', [EmpresaController::class, 'update'])->name('empresa.update');
+    });
+
+    Route::middleware('checkUserType:estudiante')->group(function () {
+        Route::get('/estudiante/perfil', [EstudiantePerfil::class, 'index'])->name('estudiante.perfil');
+        Route::get('/estudiante/dashboard', [EstudianteDashboardController::class, 'index'])->name('estudiante.dashboard');
+        Route::get('/estudiante/perfil/edit', [EstudianteController::class, 'edit'])->name('estudiante.edit');
+        Route::patch('/estudiante/perfil', [EstudianteController::class, 'update'])->name('estudiante.update');
     });
 
 });

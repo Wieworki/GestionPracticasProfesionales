@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Empresa;
+namespace App\Http\Controllers\Estudiante;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,15 +11,14 @@ class PerfilController extends Controller
     public function index(Request $request)
     {
         $usuario = $request->user();
-        $empresa = $usuario->empresa;
+        $estudiante = $usuario->estudiante;
 
-        return Inertia::render('empresa/Perfil', [
-            'empresa' => [
+        return Inertia::render('estudiante/Perfil', [
+            'estudiante' => [
                 'nombre' => $usuario->nombre,
+                'apellido' => $usuario->apellido,
                 'email' => $usuario->email,
-                'cuit' => $empresa->cuit,
-                'descripcion' => $empresa->descripcion,
-                'sitio_web' => $empresa->sitio_web,
+                'dni' => $estudiante->dni,
                 'telefono' => $usuario->telefono,
             ],
         ]);

@@ -27,6 +27,7 @@ class StoreEstudianteRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:usuario,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'], // 'confirmed' => needs password_confirmation field
             'dni' => ['required', 'string', 'max:20', 'unique:estudiante,dni'],
+            'telefono' => ['string', 'max:20'],
         ];
     }
 

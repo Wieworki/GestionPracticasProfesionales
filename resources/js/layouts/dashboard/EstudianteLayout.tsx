@@ -1,18 +1,20 @@
 import React from 'react';
 import Sidebar from '@/components/dashboard/sidebar';
+import { type SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 
 interface Props {
     children: React.ReactNode;
     nombre?: string;
-    habilitado: boolean;
 }
 
-export default function EstudianteLayout({ children, nombre, habilitado }: Props) {
+export default function EstudianteLayout({ children, nombre }: Props) {
+    const { auth } = usePage<SharedData>().props;   // No need to manually set the auth user from the controller
 
     const navItems = [
         { label: 'Mis Datos', href: '/estudiante/perfil', isEnabled: true },      // La opcion de "mis datos" esta disponible aun si el usuario no esta habilitado
-        { label: 'Ver ofertas disponibles', href: '/estudiante/ofertas', isEnabled: habilitado },
-        { label: 'Mis Postulaciones', href: '/estudiante/postulaciones', isEnabled: habilitado },
+        { label: 'Ver ofertas disponibles', href: '/estudiante/ofertas', isEnabled: auth.user.habilitado },
+        { label: 'Mis Postulaciones', href: '/estudiante/postulaciones', isEnabled: auth.user.habilitado },
     ];
 
     return (

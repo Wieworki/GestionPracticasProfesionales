@@ -14,6 +14,7 @@ type RegisterForm = {
     apellido: string;
     email: string;
     dni: string;
+    telefono: string;
     password: string;
     password_confirmation: string;
 };
@@ -33,6 +34,7 @@ export default function RegistroEstudiante({ onClose }: RegistroEstudianteProps)
         apellido: '',
         email: '',
         dni: '',
+        telefono: '',
         password: '',
         password_confirmation: '',
     });
@@ -110,6 +112,22 @@ export default function RegistroEstudiante({ onClose }: RegistroEstudianteProps)
                             placeholder="20-12345678-9"
                         />
                         <InputError message={errors.dni} className="mt-2" />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="telefono">Telefono</Label>
+                        <Input
+                            id="telefono"
+                            type="text"
+                            required
+                            autoFocus
+                            autoComplete="telefono"
+                            value={data.telefono}
+                            onChange={(e) => setData('telefono', e.target.value)}
+                            disabled={processing}
+                            placeholder=""
+                        />
+                        <InputError message={errors.telefono} className="mt-2" />
                     </div>
 
                     <div className="grid gap-2">

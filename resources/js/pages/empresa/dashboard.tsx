@@ -32,7 +32,7 @@ export default function Dashboard({ empresa, mensajeBienvenida }: Props) {
     ];
 
     return (
-        <EmpresaLayout nombre={nombre} habilitado={habilitado}>
+        <EmpresaLayout nombre={nombre}>
             <div className="space-y-6">
                 {!habilitado && <DisabledAccountNotice />}
 

@@ -66,6 +66,7 @@ class EmpresaController extends Controller
                 'cuit' => $empresa->cuit,
                 'descripcion' => $empresa->descripcion,
                 'sitio_web' => $empresa->sitio_web,
+                'telefono'=> $empresa->usuario->telefono,
             ]
         ]);
     }
@@ -75,7 +76,7 @@ class EmpresaController extends Controller
         $user = Auth::user();
         $empresa = $user->empresa;
 
-        $user->update($request->only(['nombre', 'email']));
+        $user->update($request->only(['nombre', 'email', 'telefono']));
         $empresa->update($request->only(['cuit', 'descripcion', 'sitio_web']));
 
         return redirect()

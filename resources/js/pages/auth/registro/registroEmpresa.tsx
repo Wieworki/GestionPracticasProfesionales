@@ -13,8 +13,9 @@ type RegisterForm = {
     nombre: string;
     cuit: string,
     descripcion: string,
-    sitioWeb: string,
+    sitio_web: string,
     email: string;
+    telefono: string;
     password: string;
     password_confirmation: string;
 };
@@ -29,8 +30,9 @@ export default function RegistroEmpresa({ onClose }: RegistroEmpresaProps) {
         nombre: '',
         cuit: '',
         descripcion: '',
-        sitioWeb: '',
+        sitio_web: '',
         email: '',
+        telefono: '',
         password: '',
         password_confirmation: '',
     });
@@ -98,17 +100,33 @@ export default function RegistroEmpresa({ onClose }: RegistroEmpresaProps) {
                     <div className="grid gap-2">
                         <Label htmlFor="name">Sitio web</Label>
                         <Input
-                            id="sitioWeb"
+                            id="sitio_web"
                             type="text"
                             required
                             autoFocus
-                            autoComplete="sitioWeb"
-                            value={data.sitioWeb}
-                            onChange={(e) => setData('sitioWeb', e.target.value)}
+                            autoComplete="sitio_web"
+                            value={data.sitio_web}
+                            onChange={(e) => setData('sitio_web', e.target.value)}
                             disabled={processing}
                             placeholder=""
                         />
-                        <InputError message={errors.sitioWeb} className="mt-2" />
+                        <InputError message={errors.sitio_web} className="mt-2" />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="telefono">Telefono</Label>
+                        <Input
+                            id="telefono"
+                            type="text"
+                            required
+                            autoFocus
+                            autoComplete="telefono"
+                            value={data.telefono}
+                            onChange={(e) => setData('telefono', e.target.value)}
+                            disabled={processing}
+                            placeholder=""
+                        />
+                        <InputError message={errors.telefono} className="mt-2" />
                     </div>
 
                     <div className="grid gap-2">

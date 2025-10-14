@@ -7,6 +7,7 @@ use App\Http\Requests\StoreEstudianteRequest;
 use App\Http\Requests\UpdateEstudianteRequest;
 use Inertia\Inertia;
 use App\Services\EstudianteService;
+use Illuminate\Support\Facades\Auth;
 
 class EstudianteController extends Controller
 {
@@ -59,7 +60,16 @@ class EstudianteController extends Controller
      */
     public function edit(Estudiante $estudiante)
     {
-        //
+        $estudiante = Auth::user()->estudiante;
+        return Inertia::render('estudiante/Edit', [
+            'estudiante' => [
+                'nombre' => $estudiante->usuario->nombre,
+                'apellido' => $estudiante->usuario->apellido,
+                'email' => $estudiante->usuario->email,
+                'dni' => $estudiante->dni,
+                'telefono' => $estudiante->usuario->telefono,
+            ]
+        ]);
     }
 
     /**
@@ -67,7 +77,15 @@ class EstudianteController extends Controller
      */
     public function update(UpdateEstudianteRequest $request, Estudiante $estudiante)
     {
-        //
+        $user = Auth::user();
+        $estudiante = $user->estudiante;
+
+        $user->update($request->only(['nombre', 'apellido', 'email', 'telefono']));
+        $estudiante->update($request->only(['dni']));
+
+        return redirect()
+            ->route('estudiante.perfil')
+            ->with('success', 'Datos actualizados correctamente.');
     }
 
     /**

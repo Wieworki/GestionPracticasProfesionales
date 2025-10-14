@@ -23,6 +23,7 @@ class StoreEmpresaRequest extends FormRequest
             'sitioWeb' => ['string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:usuario,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'], // 'confirmed' => needs password_confirmation field
+            'telefono' => ['string', 'max:20'],
         ];
     }
 
