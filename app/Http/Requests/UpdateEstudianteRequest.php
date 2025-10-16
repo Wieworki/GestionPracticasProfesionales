@@ -16,9 +16,20 @@ class UpdateEstudianteRequest extends FormRequest
     {
         return [
             'nombre' => ['required', 'string', 'max:255'],
+            'apellido' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
-            'dni' => ['required', 'nullable', 'string', 'max:20'],
-            'telefono' => ['string', 'max:20'],
+            'dni' => ['required', 'string', 'max:20'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nombre.required' => 'Debe ingresar su nombre.',
+            'apellido.required' => 'Debe ingresar su apellido.',
+            'email.required' => 'Debe ingresar su email.',
+            'dni.required' => 'Debe ingresar su DNI.',
         ];
     }
 }

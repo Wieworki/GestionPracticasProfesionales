@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Se usa cuando el modelo tiene una foreign key
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Empresa extends Model
 {
@@ -25,8 +26,23 @@ class Empresa extends Model
         'descripcion'
     ];
 
-    public function usuario(): HasOne
+    public function usuario(): BelongsTo
     {
-        return $this->hasOne(Usuario::class, 'id', 'usuario_id');
+        return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
+    }
+
+    protected function nombre(): Attribute
+    {
+        return Attribute::get(fn() => $this->usuario?->nombre);
+    }
+
+    protected function email(): Attribute
+    {
+        return Attribute::get(fn() => $this->usuario?->email);
+    }
+
+    protected function habilitado(): Attribute
+    {
+        return Attribute::get(fn() => $this->usuario?->habilitado);
     }
 }

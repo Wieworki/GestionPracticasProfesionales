@@ -44,6 +44,11 @@ class Usuario extends Authenticatable
         return $this->hasOne(Estudiante::class, 'usuario_id');
     }
 
+    public function administrativo(): HasOne
+    {
+        return $this->hasOne(Administrativo::class, 'usuario_id');
+    }
+
     public function isEmpresa()
     {
         $tipo = $this->tipoUsuario;
@@ -54,6 +59,12 @@ class Usuario extends Authenticatable
     {
         $tipo = $this->tipoUsuario;
         return $tipo->nombre === 'estudiante';
+    }
+
+    public function isAdministrativo()
+    {
+        $tipo = $this->tipoUsuario;
+        return $tipo->nombre === 'administrativo';
     }
 
 }

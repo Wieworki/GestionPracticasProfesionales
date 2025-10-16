@@ -1,22 +1,20 @@
 import React from "react";
 import { Head, Link } from "@inertiajs/react";
-import EmpresaLayout from '@/layouts/dashboard/EmpresaLayout';
+import AdministrativoLayout from '@/layouts/dashboard/AdministrativoLayout';
 import { Button } from "@/components/ui/button";
 
 interface Props {
-    empresa: {
+    administrativo: {
         nombre: string;
+        apellido?: string;
         email: string;
-        cuit: string;
-        descripcion?: string;
-        sitio_web?: string;
-        telefono?: string;
+        telefono: string;
     };
 }
 
-export default function Perfil({ empresa }: Props) {
+export default function Perfil({ administrativo }: Props) {
     return (
-        <EmpresaLayout nombre={empresa.nombre}>
+        <AdministrativoLayout nombre={administrativo.nombre}>
             <Head title="Mi perfil" />
 
             <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded-xl space-y-6">
@@ -25,26 +23,24 @@ export default function Perfil({ empresa }: Props) {
                 </h1>
 
                 <div className="space-y-4 text-gray-700">
-                    <p><strong>Nombre:</strong> {empresa.nombre}</p>
-                    <p><strong>Email:</strong> {empresa.email}</p>
-                    <p><strong>CUIT:</strong> {empresa.cuit}</p>
-                    <p><strong>Descripción:</strong> {empresa.descripcion || "—"}</p>
-                    <p><strong>Sitio Web:</strong> {empresa.sitio_web || "—"}</p>
-                    <p><strong>Telefono:</strong> {empresa.telefono}</p>
+                    <p><strong>Nombre:</strong> {administrativo.nombre}</p>
+                    <p><strong>Apellido:</strong> {administrativo.apellido}</p>
+                    <p><strong>Email:</strong> {administrativo.email}</p>
+                    <p><strong>Telefono:</strong> {administrativo.telefono}</p>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-6 border-t">
-                    <Link href="/empresa/perfil/edit">
+                    <Link href="/administrativo/perfil/edit">
                         <Button>Modificar datos</Button>
                     </Link>
                     <Link href="/password/cambiar">
                         <Button variant="outline">Cambiar contraseña</Button>
                     </Link>
-                    <Link href="/empresa/dashboard">
+                    <Link href="/administrativo/dashboard">
                         <Button variant="secondary">Volver</Button>
                     </Link>
                 </div>
             </div>
-        </EmpresaLayout>
+        </AdministrativoLayout>
     );
 }

@@ -26,7 +26,7 @@ class DashboardTest extends TestCase
             'tipo_id' => $tipoEstudiante->id
         ]));
 
-        $this->get('/dashboard')->assertRedirect('/dashboard/estudiante');
+        $this->get('/dashboard')->assertRedirect('/estudiante/dashboard');
     }
 
     public function test_authenticated_empresa_can_visit_the_dashboard()
@@ -52,6 +52,6 @@ class DashboardTest extends TestCase
             'tipo_id' => $tipoAdministrativo->id
         ]));
 
-        $this->get('/dashboard')->assertRedirect('/dashboard/administrativo');
+        $this->get('/dashboard')->assertRedirect('/administrativo/dashboard');
     }
 }

@@ -18,12 +18,12 @@ class StoreEmpresaRequest extends FormRequest
     {
         return [
             'nombre' => ['required', 'string', 'max:255'],
-            'cuit' => ['string', 'max:20'],
-            'descripcion' => ['required', 'string', 'max:255'],
-            'sitioWeb' => ['string', 'max:255'],
+            'cuit' => ['nullable', 'string', 'max:20'],
+            'descripcion' => ['nullable', 'required', 'string', 'max:255'],
+            'sitioWeb' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:usuario,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'], // 'confirmed' => needs password_confirmation field
-            'telefono' => ['string', 'max:20'],
+            'telefono' => ['nullable', 'string', 'max:20'],
         ];
     }
 
