@@ -26,3 +26,7 @@ Vite dev	http://localhost:5173
 PostgreSQL	localhost:5432 (internal: db)
 
 Redis	localhost:6379 (internal: redis)
+
+## Varios
+
+Ejecutar los tests: docker compose exec app php artisan test
