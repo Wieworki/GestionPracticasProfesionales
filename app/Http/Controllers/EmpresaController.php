@@ -9,51 +9,51 @@ use Inertia\Inertia;
 use App\Services\EmpresaService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use App\Repositories\EmpresaRepository;
 
 class EmpresaController extends Controller
 {
 
     protected $empresaService;
+    protected $empresaRepository;
 
-    public function __construct(EmpresaService $empresaService)
+    public function __construct(
+        EmpresaService $empresaService,
+        EmpresaRepository $empresaRepository
+        )
     {
         $this->empresaService = $empresaService;
+        $this->empresaRepository = $empresaRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function indexEstudiante()
     {
-        return Inertia::render('empresa/index');
+        $empresas = $this->empresaRepository->getHabilitadas(); // solo habilitadas
+        $usuario = Auth::user();
+
+        return Inertia::render('estudiante/VerEmpresas', [
+            'estudiante' => [
+                'nombre' => $usuario->nombre,
+                'habilitado' => $usuario->habilitado,
+            ],
+            'empresas' => $empresas,
+            'showNewButton' => false,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function indexAdministrativo()
     {
-        return Inertia::render('empresa/create');
-    }
+        $empresas = $this->empresaRepository->getAll(); // todas
+        $usuario = Auth::user();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreEmpresaRequest $request)
-    {
-        $userData = $request->only(['nombre', 'email', 'password']);
-        $empresaData = $request->only(['cuit', 'descripcion', 'sitioweb']);
-        $empresa = $this->empresaService->createEmpresaWithUser($userData, $empresaData);
-
-        return Inertia::render('empresa/show', ['empresa' => $empresa->id]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Empresa $empresa)
-    {
-        return Inertia::render('empresa/show', ['empresa' => $empresa->id]);
+        return Inertia::render('administrativo/VerEmpresas', [
+            'administrativo' => [
+                'nombre' => $usuario->nombre,
+                'habilitado' => $usuario->habilitado,
+            ],
+            'empresas' => $empresas,
+            'showNewButton' => true,
+        ]);
     }
 
     public function edit()
@@ -84,11 +84,4 @@ class EmpresaController extends Controller
             ->with('success', 'Datos actualizados correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Empresa $empresa)
-    {
-        //
-    }
 }

@@ -48,4 +48,18 @@ class UsuarioFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function deshabilitado(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'habilitado' => false,
+        ]);
+    }
+
+    public function habilitado(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'habilitado' => true,
+        ]);
+    }
 }

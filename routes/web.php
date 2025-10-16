@@ -50,6 +50,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/estudiante/dashboard', [EstudianteDashboardController::class, 'index'])->name('estudiante.dashboard');
         Route::get('/estudiante/perfil/edit', [EstudianteController::class, 'edit'])->name('estudiante.edit');
         Route::patch('/estudiante/perfil', [EstudianteController::class, 'update'])->name('estudiante.update');
+
+        Route::get('/estudiante/empresas', [EmpresaController::class, 'indexEstudiante'])
+            ->name('estudiante.empresas.index');
     });
 
     Route::middleware('checkUserType:administrativo')->group(function () {
@@ -57,6 +60,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/administrativo/dashboard', [AdministrativoDashboardController::class, 'index'])->name('administrativo.dashboard');
         Route::get('/administrativo/perfil/edit', [AdministrativoController::class, 'edit'])->name('administrativo.edit');
         Route::patch('/administrativo/perfil', [AdministrativoController::class, 'update'])->name('administrativo.update');
+
+        Route::get('/administrativo/empresas', [EmpresaController::class, 'indexAdministrativo'])
+            ->name('administrativo.empresas.index');
     });
 
 });
