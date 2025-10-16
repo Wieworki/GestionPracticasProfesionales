@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Usuario;
 
 class Administrativo extends Model
 {
@@ -15,4 +17,9 @@ class Administrativo extends Model
     protected $fillable = [
         'usuario_id'
     ];
+
+    public function usuario(): HasOne
+    {
+        return $this->hasOne(Usuario::class, 'id', 'usuario_id');
+    }
 }

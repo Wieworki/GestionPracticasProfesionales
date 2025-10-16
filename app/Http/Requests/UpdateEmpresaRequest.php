@@ -20,7 +20,15 @@ class UpdateEmpresaRequest extends FormRequest
             'cuit' => ['nullable', 'string', 'max:20'],
             'descripcion' => ['nullable', 'string', 'max:500'],
             'sitio_web' => ['nullable', 'string', 'max:255'],
-            'telefono' => ['string', 'max:20'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nombre.required' => 'Debe ingresar su nombre.',
+            'email.required' => 'Debe ingresar su email.',
         ];
     }
 }

@@ -17,7 +17,7 @@ class AdministrativoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'usuario_id' => fake()->numerify('###'),
         ];
     }
 }

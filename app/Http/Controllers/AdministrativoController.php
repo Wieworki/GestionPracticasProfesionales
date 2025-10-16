@@ -7,6 +7,7 @@ use App\Http\Requests\StoreAdministrativoRequest;
 use App\Http\Requests\UpdateAdministrativoRequest;
 use Inertia\Inertia;
 use App\Services\AdministrativoService;
+use Illuminate\Support\Facades\Auth;
 
 class AdministrativoController extends Controller
 {
@@ -18,21 +19,6 @@ class AdministrativoController extends Controller
         $this->administrativoService = $administrativoService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return Inertia::render('administrativo/index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-       return Inertia::render('administrativo/create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -46,19 +32,19 @@ class AdministrativoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Administrativo $administrativo)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Administrativo $administrativo)
     {
-        //
+        $administrativo = Auth::user()->administrativo;
+        return Inertia::render('administrativo/Edit', [
+            'administrativo' => [
+                'nombre' => $administrativo->usuario->nombre,
+                'apellido' => $administrativo->usuario->apellido,
+                'email' => $administrativo->usuario->email,
+                'telefono'=> $administrativo->usuario->telefono,
+            ]
+        ]);
     }
 
     /**
@@ -66,14 +52,12 @@ class AdministrativoController extends Controller
      */
     public function update(UpdateAdministrativoRequest $request, Administrativo $administrativo)
     {
-        //
-    }
+        $user = Auth::user();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Administrativo $administrativo)
-    {
-        //
+        $user->update($request->only(['nombre', 'apellido', 'email', 'telefono']));
+
+        return redirect()
+            ->route('administrativo.perfil')
+            ->with('success', 'Datos actualizados correctamente.');
     }
 }

@@ -22,7 +22,20 @@ class StoreAdministrativoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nombre' => ['required', 'string', 'max:255'],
+            'apellido' => ['string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:usuario,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nombre.required' => 'Debe ingresar su nombre.',
+            'apellido.required' => 'Debe ingresar su apellido.',
+            'email.required' => 'Debe ingresar su email.',
         ];
     }
 }
