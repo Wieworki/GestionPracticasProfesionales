@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 use App\Http\Controllers\Empresa\PerfilController as EmpresaPerfil;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
+use App\Http\Controllers\Auth\PasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -33,6 +34,8 @@ Route::get('/admin/administrativo/create', [AdministrativoController::class, 'cr
 Route::post('/admin/administrativo/store', [AdministrativoController::class, 'store'])->name('storeAdministrativo');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/password/cambiar', [PasswordController::class, 'edit'])->name('password.cambiar');
+    Route::post('/password/guardar', [PasswordController::class, 'update'])->name('password.guardar');
     Route::get('/dashboard', DashboardRedirectController::class)->name('dashboard');    // This calls the functin "__invoke" of the class
 
     Route::middleware('checkUserType:empresa')->group(function () {

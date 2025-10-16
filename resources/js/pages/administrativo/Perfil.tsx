@@ -33,7 +33,7 @@ export default function Perfil({ administrativo }: Props) {
                     <Link href="/administrativo/perfil/edit">
                         <Button>Modificar datos</Button>
                     </Link>
-                    <Link href="/administrativo/cambiar-password">
+                    <Link href="/password/cambiar">
                         <Button variant="outline">Cambiar contraseña</Button>
                     </Link>
                     <Link href="/administrativo/dashboard">

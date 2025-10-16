@@ -35,7 +35,7 @@ export default function Perfil({ estudiante }: Props) {
                     <Link href="/estudiante/perfil/edit">
                         <Button>Modificar datos</Button>
                     </Link>
-                    <Link href="/estudiante/cambiar-password">
+                    <Link href="/password/cambiar">
                         <Button variant="outline">Cambiar contraseña</Button>
                     </Link>
                     <Link href="/estudiante/dashboard">
