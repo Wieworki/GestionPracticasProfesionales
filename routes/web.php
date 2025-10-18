@@ -53,6 +53,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/estudiante/empresas', [EmpresaController::class, 'indexEstudiante'])
             ->name('estudiante.empresas.index');
+        Route::get('/estudiante/empresas/show', [EmpresaController::class, 'indexEstudiante'])
+            ->name('estudiante.empresas.show'); //REVISAR
     });
 
     Route::middleware('checkUserType:administrativo')->group(function () {
@@ -63,6 +65,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/administrativo/empresas', [EmpresaController::class, 'indexAdministrativo'])
             ->name('administrativo.empresas.index');
+        Route::get('/administrativo/empresas/show', [EmpresaController::class, 'indexAdministrativo'])
+            ->name('administrativo.empresas.show'); //REVISAR
+        Route::get('/administrativo/empresas/create', [EmpresaController::class, 'indexAdministrativo'])
+            ->name('administrativo.empresas.create'); //REVISAR
+        Route::get('/administrativo/empresas/edit', [EmpresaController::class, 'indexAdministrativo'])
+            ->name('administrativo.empresas.edit'); //REVISAR
     });
 
 });

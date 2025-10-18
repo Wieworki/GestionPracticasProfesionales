@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Administrativo;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,6 +13,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TipoUsuarioSeeder::class,
             UsuarioSeeder::class,
+            EmpresaSeeder::class,
+            EstudianteSeeder::class,
+            AdministrativoSeeder::class,
         ]);
     }
 }
