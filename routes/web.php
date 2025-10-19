@@ -50,6 +50,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::post('/empresa/ofertas', [EmpresaOferta::class, 'store'])
             ->name('empresa.ofertas.store');
+
+        Route::get('/empresa/ofertas', [EmpresaOferta::class, 'index'])
+            ->name('empresa.ofertas.index');
+
+        Route::get('/empresa/ofertas/show', [EmpresaOferta::class, 'index'])
+            ->name('empresa.ofertas.show'); // REVISAR
     });
 
     Route::middleware('checkUserType:estudiante')->group(function () {

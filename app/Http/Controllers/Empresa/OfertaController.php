@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Empresa;
 
 use App\Http\Controllers\Controller;
 use App\Services\OfertaService;
+use App\Repositories\OfertaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -12,11 +13,39 @@ use App\Models\Carrera;
 
 class OfertaController extends Controller
 {
-    protected OfertaService $ofertaService;
 
-    public function __construct(OfertaService $ofertaService)
+    protected OfertaService $ofertaService;
+    protected OfertaRepository $ofertaRepository;
+
+    public function __construct(OfertaService $ofertaService, OfertaRepository $ofertaRepository)
     {
         $this->ofertaService = $ofertaService;
+        $this->ofertaRepository = $ofertaRepository;
+    }
+
+    public function index(Request $request)
+    {
+        $usuario = $request->user();
+        $empresa = $usuario->empresa;
+
+        if (!$empresa) {
+            abort(403, 'Solo los usuarios empresa pueden acceder a esta sección.');
+        }
+
+        $ofertas = $this->ofertaRepository->listarPorEmpresa(
+            empresaId: $empresa->id,
+            search: $request->input('search')
+        );
+
+        return Inertia::render('empresa/MisOfertas', [
+            'empresa' => [
+                'nombre' => $empresa->nombre,
+            ],
+            'ofertas' => $ofertas,
+            'filters' => [
+                'search' => $request->input('search'),
+            ],
+        ]);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Carrera;
 use App\Models\Empresa;
 use App\Models\Usuario;
 use App\Models\TipoUsuario;
+use App\Models\Oferta;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -101,5 +102,63 @@ class OfertaControllerTest extends TestCase
 
         $response->assertStatus(403);
         $this->assertDatabaseMissing('oferta', ['titulo' => 'Backend Developer']);
+    }
+
+    // Pagina de mis ofertas
+
+     /** @test */
+    public function una_empresa_puede_ver_el_listado_de_sus_ofertas()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuario = Usuario::factory()->habilitado()->create(
+            ['tipo_id' => $tipoEmpresa->id]
+        );
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+
+        $ofertas = Oferta::factory()->count(3)->create([
+            'empresa_id' => $empresa->id,
+            'estado' => 'Pendiente',
+        ]);
+
+        $response = $this->actingAs($usuario)->get(route('empresa.ofertas.index'));
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('empresa/MisOfertas')
+            ->has('ofertas.data', 3)
+            ->where('ofertas.data.0.empresa_id', $empresa->id)
+        );
+    }
+
+    /** @test */
+    public function no_puede_acceder_un_usuario_que_no_sea_empresa()
+    {
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $usuario = Usuario::factory()->habilitado()->create(
+            ['tipo_id' => $tipoEstudiante->id]
+        );
+
+        $response = $this->actingAs($usuario)->get(route('empresa.ofertas.index'));
+        $response->assertForbidden();
+    }
+
+    /** @test */
+    public function permite_filtrar_ofertas_por_titulo()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuario = Usuario::factory()->habilitado()->create(
+            ['tipo_id' => $tipoEmpresa->id]
+        );
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+
+        Oferta::factory()->create(['empresa_id' => $empresa->id, 'titulo' => 'Backend Developer']);
+        Oferta::factory()->create(['empresa_id' => $empresa->id, 'titulo' => 'Frontend Developer']);
+
+        $response = $this->actingAs($usuario)->get(route('empresa.ofertas.index', ['search' => 'backend']));
+
+        $response->assertInertia(fn ($page) => $page
+            ->has('ofertas.data', 1)
+            ->where('ofertas.data.0.titulo', 'Backend Developer')
+        );
     }
 }

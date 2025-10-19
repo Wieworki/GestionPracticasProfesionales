@@ -15,7 +15,7 @@ export default function EmpresaLayout({ children, nombre }: Props) {
     const navItems = [
         { label: 'Mis Datos', href: '/empresa/perfil', isEnabled: true },      // La opcion de "mis datos" esta disponible aun si el usuario no esta habilitado
         { label: 'Nueva Oferta', href: '/empresa/ofertas/nueva', isEnabled: auth.user.habilitado },
-        { label: 'Mis Ofertas', href: '/empresa/ofertas/misofertas', isEnabled: auth.user.habilitado },
+        { label: 'Mis Ofertas', href: '/empresa/ofertas', isEnabled: auth.user.habilitado },
     ];
 
     return (

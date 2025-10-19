@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\Oferta;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+
+class OfertaRepository
+{
+    public function listarPorEmpresa(int $empresaId, ?string $search = null, int $perPage = 10): LengthAwarePaginator
+    {
+        $query = DB::table('oferta')
+            ->join('empresa', 'oferta.empresa_id', '=', 'empresa.id')
+            ->select(
+                'oferta.id',
+                'oferta.titulo',
+                'oferta.descripcion',
+                'oferta.fecha_creacion',
+                'oferta.fecha_cierre',
+                'oferta.estado',
+                'oferta.modalidad',
+                'oferta.empresa_id',
+            )
+            ->where('empresa_id', $empresaId)
+            ->orderBy('oferta.fecha_creacion', 'desc');
+
+        if ($search) {
+            $likeOperator = DB::getDriverName() === 'pgsql' ? 'ilike' : 'like';
+            $query->where('titulo', $likeOperator, "%{$search}%");
+        }
+
+        return $query->paginate($perPage)->withQueryString();
+    }
+}
