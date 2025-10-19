@@ -30,3 +30,8 @@ Redis	localhost:6379 (internal: redis)
 ## Varios
 
 Ejecutar los tests: docker compose exec app php artisan test
+
+# Troubleshooting
+
+- Error response from daemon: can't access specified distro mount service: stat /run/guest-services/distro-services/ubuntu.sock: no such file or directory: 
+Reiniciar docker desktop
