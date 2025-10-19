@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('empresa_id')->constrained(table: 'empresa')->onDelete('cascade');
             $table->string('titulo');
             $table->text('descripcion');
-            $table->date('fecha_creacion');
+            $table->date('fecha_creacion')->useCurrent();
             $table->date('fecha_cierre');
             $table->string('estado');
             $table->string('modalidad');

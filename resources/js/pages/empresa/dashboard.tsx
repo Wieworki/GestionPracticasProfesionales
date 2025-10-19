@@ -20,7 +20,7 @@ export default function Dashboard({ empresa, mensajeBienvenida }: Props) {
         {
             title: 'Crear nueva oferta',
             description: 'Publicá una nueva práctica profesional y encontrá estudiantes interesados.',
-            href: '/empresa/ofertas/crear',
+            href: '/empresa/ofertas/nueva',
             icon: <FileText className="text-blue-600 w-6 h-6" />,
         },
         {

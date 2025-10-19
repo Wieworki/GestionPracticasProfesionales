@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
             EmpresaSeeder::class,
             EstudianteSeeder::class,
             AdministrativoSeeder::class,
+            FacultadSeeder::class,
+            CarreraSeeder::class,
         ]);
     }
 }

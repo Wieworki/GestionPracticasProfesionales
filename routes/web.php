@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\EmpresaDashboardController;
 use App\Http\Controllers\Dashboard\AdministrativoDashboardController;
 use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 use App\Http\Controllers\Empresa\PerfilController as EmpresaPerfil;
+use App\Http\Controllers\Empresa\OfertaController as EmpresaOferta;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
 use App\Http\Controllers\Auth\PasswordController;
@@ -43,6 +44,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/empresa/dashboard', [EmpresaDashboardController::class, 'index'])->name('empresa.dashboard');
         Route::get('/empresa/perfil/edit', [EmpresaController::class, 'edit'])->name('empresa.edit');
         Route::patch('/empresa/perfil', [EmpresaController::class, 'update'])->name('empresa.update');
+
+        Route::get('/empresa/ofertas/nueva', [EmpresaOferta::class, 'create'])
+            ->name('empresa.ofertas.create');
+
+        Route::post('/empresa/ofertas', [EmpresaOferta::class, 'store'])
+            ->name('empresa.ofertas.store');
     });
 
     Route::middleware('checkUserType:estudiante')->group(function () {
