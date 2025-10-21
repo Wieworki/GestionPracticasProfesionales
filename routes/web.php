@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 use App\Http\Controllers\Empresa\PerfilController as EmpresaPerfil;
 use App\Http\Controllers\Empresa\OfertaController as EmpresaOferta;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
+use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteController;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
 use App\Http\Controllers\Auth\PasswordController;
 
@@ -51,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/empresa/ofertas', [EmpresaOferta::class, 'store'])
             ->name('empresa.ofertas.store');
 
-        Route::get('/empresa/ofertas', [EmpresaOferta::class, 'index'])
+        Route::get('/empresa/ofertas/index', [EmpresaOferta::class, 'index'])
             ->name('empresa.ofertas.index');
 
         Route::get('/empresa/ofertas/show', [EmpresaOferta::class, 'index'])
@@ -66,8 +67,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/estudiante/empresas', [EmpresaController::class, 'indexEstudiante'])
             ->name('estudiante.empresas.index');
-        Route::get('/estudiante/empresas/show', [EmpresaController::class, 'indexEstudiante'])
-            ->name('estudiante.empresas.show'); //REVISAR
+        Route::get('/estudiante/empresas/show/{id}', [EmpresaEstudianteController::class, 'show'])
+            ->name('estudiante.empresas.show');
     });
 
     Route::middleware('checkUserType:administrativo')->group(function () {

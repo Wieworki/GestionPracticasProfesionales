@@ -16,7 +16,7 @@ export const columnasBase: ColumnDef<Empresa>[] = [
   },
   {
     accessorKey: 'email',
-    header: 'Email',
+    header: 'Email de contacto',
   },
   {
     accessorKey: 'created_at',
@@ -51,12 +51,6 @@ export const columnasAdministrativo: ColumnDef<Empresa>[] = [
         >
           Ver
         </Link>
-        <Link
-          href={route('administrativo.empresas.edit', row.original.id)}
-          className="text-green-600 hover:underline"
-        >
-          Editar
-        </Link>
       </div>
     ),
   },
@@ -69,7 +63,7 @@ export const columnasEstudiante: ColumnDef<Empresa>[] = [
     header: 'Acciones',
     cell: ({ row }) => (
       <Link
-        href={route('estudiante.empresas.show', row.original.id)}
+        href={route('estudiante.empresas.show', { id: row.original.id })}
         className="text-blue-600 hover:underline"
       >
         Ver

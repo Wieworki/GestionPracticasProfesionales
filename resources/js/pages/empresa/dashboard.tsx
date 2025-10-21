@@ -26,7 +26,7 @@ export default function Dashboard({ empresa, mensajeBienvenida }: Props) {
         {
             title: 'Gestionar mis ofertas',
             description: 'Editá o eliminá tus ofertas activas y revisá las postulaciones.',
-            href: '/empresa/ofertas',
+            href: '/empresa/ofertas/index',
             icon: <FileText className="text-blue-600 w-6 h-6" />,
         },
     ];

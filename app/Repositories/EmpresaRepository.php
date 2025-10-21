@@ -79,4 +79,12 @@ class EmpresaRepository
 
         return $query->paginate($perPage)->withQueryString();
     }
+
+    public function findHabilitadaById($id): ?Empresa
+    {
+        return Empresa::where('empresa.id', $id)
+            ->join('usuario', 'empresa.usuario_id', '=', 'usuario.id')
+            ->where('usuario.habilitado', true)
+            ->first();
+    }
 }
