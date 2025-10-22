@@ -26,7 +26,8 @@ class Usuario extends Authenticatable
         'email',
         'telefono',
         'password',
-        'tipo_id'
+        'tipo_id',
+        'habilitado'
     ];
 
     public function tipoUsuario(): HasOne

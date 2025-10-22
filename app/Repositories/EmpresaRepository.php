@@ -87,4 +87,10 @@ class EmpresaRepository
             ->where('usuario.habilitado', true)
             ->first();
     }
+
+    public function findById($id): ?Empresa
+    {
+        return Empresa::where('empresa.id', $id)
+            ->first();
+    }
 }

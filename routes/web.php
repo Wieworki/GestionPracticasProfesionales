@@ -15,6 +15,7 @@ use App\Http\Controllers\Empresa\OfertaController as EmpresaOferta;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteController;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
+use App\Http\Controllers\Administrativo\EmpresaController as EmpresaAdministrativoController;
 use App\Http\Controllers\Auth\PasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -79,8 +80,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/administrativo/empresas', [EmpresaController::class, 'indexAdministrativo'])
             ->name('administrativo.empresas.index');
-        Route::get('/administrativo/empresas/show', [EmpresaController::class, 'indexAdministrativo'])
-            ->name('administrativo.empresas.show'); //REVISAR
+        Route::get('/administrativo/empresas/show/{id}', [EmpresaAdministrativoController::class, 'show'])
+            ->name('administrativo.empresas.show');
+        Route::patch('/administrativo/empresas/convenio', [EmpresaAdministrativoController::class, 'confirmarConvenio'])
+            ->name('administrativo.empresas.convenio');
         Route::get('/administrativo/empresas/create', [EmpresaController::class, 'indexAdministrativo'])
             ->name('administrativo.empresas.create'); //REVISAR
         Route::get('/administrativo/empresas/edit', [EmpresaController::class, 'indexAdministrativo'])
