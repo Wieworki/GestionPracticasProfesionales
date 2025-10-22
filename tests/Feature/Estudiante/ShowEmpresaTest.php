@@ -16,11 +16,6 @@ class ShowEmpresaTest extends TestCase
     /** @test */
     public function estudiante_puede_ver_detalle_de_empresa_habilitada()
     {
-        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
-        $estudiante = Usuario::factory()->habilitado()->create(
-            ['tipo_id' => $tipoEstudiante->id]
-        );
-
         $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
         $usuarioEmpresa = Usuario::factory()->habilitado()->create(
             ['tipo_id' => $tipoEmpresa->id]
@@ -31,7 +26,15 @@ class ShowEmpresaTest extends TestCase
             'sitio_web' => 'https://tech.com',
         ]);
 
-        $response = $this->actingAs($estudiante)->get("/estudiante/empresas/show/{$empresa->id}");
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $usuarioEstudiante = Usuario::factory()->habilitado()->create(
+            ['tipo_id' => $tipoEstudiante->id]
+        );
+        $estudiante = Estudiante::factory()->create([
+            'usuario_id' => $usuarioEstudiante->id,
+        ]);
+
+        $response = $this->actingAs($usuarioEstudiante)->get("/estudiante/empresas/show/{$empresa->id}");
 
         $response->assertStatus(200)
                  ->assertInertia(fn ($page) => $page
