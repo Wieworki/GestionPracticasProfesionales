@@ -16,6 +16,7 @@ use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteController;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
 use App\Http\Controllers\Administrativo\EmpresaController as EmpresaAdministrativoController;
+use App\Http\Controllers\Administrativo\EstudianteController as EstudianteAdministrativoController;
 use App\Http\Controllers\Auth\PasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -88,6 +89,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('administrativo.empresas.create'); //REVISAR
         Route::get('/administrativo/empresas/edit', [EmpresaController::class, 'indexAdministrativo'])
             ->name('administrativo.empresas.edit'); //REVISAR
+
+        Route::get('/administrativo/estudiantes', [EstudianteAdministrativoController::class, 'index'])
+            ->name('administrativo.estudiantes.index');
+        Route::get('/administrativo/estudiantes/show', [EstudianteAdministrativoController::class, 'index'])
+            ->name('administrativo.estudiantes.show');
     });
 
 });
