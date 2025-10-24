@@ -43,23 +43,6 @@ class EmpresaController extends Controller
         ]);
     }
 
-    public function indexAdministrativo()
-    {
-        $search = request('search');
-        $empresas = $this->empresaRepository->getAll($search);
-        $usuario = Auth::user();
-
-        return Inertia::render('administrativo/VerEmpresas', [
-            'administrativo' => [
-                'nombre' => $usuario->nombre,
-                'habilitado' => $usuario->habilitado,
-            ],
-            'empresas' => $empresas,
-            'filters' => request()->only('search'),
-            'showNewButton' => true,
-        ]);
-    }
-
     public function edit()
     {
         $empresa = Auth::user()->empresa;

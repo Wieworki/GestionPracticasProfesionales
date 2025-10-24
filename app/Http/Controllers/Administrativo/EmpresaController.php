@@ -7,16 +7,21 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Repositories\EmpresaRepository;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Administrativo\StoreEmpresaRequest;
+use App\Services\EmpresaService;
 
 class EmpresaController extends Controller
 {
+    protected $empresaService;
     protected $empresaRepository;
 
     public function __construct(
-        EmpresaRepository $empresaRepository
+        EmpresaRepository $empresaRepository,
+        EmpresaService $empresaService
         )
     {
         $this->empresaRepository = $empresaRepository;
+        $this->empresaService = $empresaService;
     }
 
     public function show(Request $request, $id)
@@ -48,6 +53,23 @@ class EmpresaController extends Controller
         ]);
     }
 
+    public function index(Request $request)
+    {
+        $search = request('search');
+        $empresas = $this->empresaRepository->getAll($search);
+        $usuario = $request->user();
+
+        return Inertia::render('administrativo/VerEmpresas', [
+            'administrativo' => [
+                'nombre' => $usuario->nombre,
+                'habilitado' => $usuario->habilitado,
+            ],
+            'empresas' => $empresas,
+            'filters' => request()->only('search'),
+            'showNewButton' => true,
+        ]);
+    }
+
     public function confirmarConvenio(Request $request)
     {
         $id = $request->only(['id']);
@@ -61,5 +83,26 @@ class EmpresaController extends Controller
 
         return redirect()->route('administrativo.empresas.show', $id)
             ->with('success', 'Empresa actualizada correctamente.');
+    }
+
+    public function create(Request $request)
+    {
+        $usuario = $request->user();
+        $administrativo = $usuario->administrativo;
+        return Inertia::render('administrativo/CrearEmpresa', [
+            'administrativo' => [
+                'nombre' => $administrativo->nombre,
+            ],
+        ]);
+    }
+
+    public function store(StoreEmpresaRequest $request)
+    {
+        $userData = $request->only(['nombre', 'email', 'password', 'telefono']);
+        $empresaData = $request->only(['cuit', 'descripcion', 'sitio_web']);
+        $empresa = $this->empresaService->createEmpresaWithUser($userData, $empresaData);
+
+        return redirect()->route('administrativo.empresas.index')
+                         ->with('success', 'Empresa registrada correctamente.');
     }
 }

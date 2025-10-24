@@ -79,16 +79,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/administrativo/perfil/edit', [AdministrativoController::class, 'edit'])->name('administrativo.edit');
         Route::patch('/administrativo/perfil', [AdministrativoController::class, 'update'])->name('administrativo.update');
 
-        Route::get('/administrativo/empresas', [EmpresaController::class, 'indexAdministrativo'])
+        Route::get('/administrativo/empresas', [EmpresaAdministrativoController::class, 'index'])
             ->name('administrativo.empresas.index');
         Route::get('/administrativo/empresas/show/{id}', [EmpresaAdministrativoController::class, 'show'])
             ->name('administrativo.empresas.show');
         Route::patch('/administrativo/empresas/convenio', [EmpresaAdministrativoController::class, 'confirmarConvenio'])
             ->name('administrativo.empresas.convenio');
-        Route::get('/administrativo/empresas/create', [EmpresaController::class, 'indexAdministrativo'])
-            ->name('administrativo.empresas.create'); //REVISAR
-        Route::get('/administrativo/empresas/edit', [EmpresaController::class, 'indexAdministrativo'])
-            ->name('administrativo.empresas.edit'); //REVISAR
+        Route::get('/administrativo/empresas/create', [EmpresaAdministrativoController::class, 'create'])
+            ->name('administrativo.empresas.create');
+        Route::post('/administrativo/empresas/store', [EmpresaAdministrativoController::class, 'store'])
+            ->name('administrativo.empresas.store');
 
         Route::get('/administrativo/estudiantes', [EstudianteAdministrativoController::class, 'index'])
             ->name('administrativo.estudiantes.index');

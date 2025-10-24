@@ -11,23 +11,19 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Administrativo\UpdateEstudianteRequest;
 use App\Http\Requests\Administrativo\StoreEstudianteRequest;
 use App\Services\EstudianteService;
-use App\Services\EmpresaService;
 
 class EstudianteController extends Controller
 {
     protected $estudianteRepository;
     protected $estudianteService;
-    protected $empresaService;
 
     public function __construct(
         EstudianteRepository $estudianteRepository,
         EstudianteService $estudianteService, 
-        EmpresaService $empresaService
         )
     {
         $this->estudianteRepository = $estudianteRepository;
         $this->estudianteService = $estudianteService;
-        $this->empresaService = $empresaService;
     }
 
     public function index(Request $request)
