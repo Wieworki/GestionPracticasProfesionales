@@ -27,6 +27,7 @@ interface Props {
   filters: { search?: string };
   columns: ColumnDef<Estudiante>[];
   searchRoute: string;
+  createRoute: string;
 }
 
 export default function ListadoEstudiantes({
@@ -34,6 +35,7 @@ export default function ListadoEstudiantes({
   filters,
   columns,
   searchRoute,
+  createRoute
 }: Props) {
   const [search, setSearch] = React.useState(filters.search || '');
 
@@ -67,6 +69,13 @@ export default function ListadoEstudiantes({
             Buscar
           </button>
         </form>
+
+        <Link
+          href={createRoute}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Nuevo estudiante
+        </Link>
       </div>
 
       {/* Tabla */}

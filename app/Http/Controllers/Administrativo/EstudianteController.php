@@ -9,16 +9,25 @@ use Inertia\Inertia;
 use App\Models\Estudiante;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Administrativo\UpdateEstudianteRequest;
+use App\Http\Requests\Administrativo\StoreEstudianteRequest;
+use App\Services\EstudianteService;
+use App\Services\EmpresaService;
 
 class EstudianteController extends Controller
 {
     protected $estudianteRepository;
+    protected $estudianteService;
+    protected $empresaService;
 
     public function __construct(
-        EstudianteRepository $estudianteRepository
+        EstudianteRepository $estudianteRepository,
+        EstudianteService $estudianteService, 
+        EmpresaService $empresaService
         )
     {
         $this->estudianteRepository = $estudianteRepository;
+        $this->estudianteService = $estudianteService;
+        $this->empresaService = $empresaService;
     }
 
     public function index(Request $request)
@@ -98,5 +107,30 @@ class EstudianteController extends Controller
 
         return redirect()->route('administrativo.estudiantes.show', $estudiante->id)
                          ->with('success', 'Datos del estudiante actualizados correctamente.');
+    }
+
+    public function create(Request $request)
+    {
+        $usuario = $request->user();
+        $administrativo = $usuario->administrativo;
+
+        return Inertia::render('administrativo/CrearEstudiante', [
+            'administrativo' => [
+                'nombre' => $administrativo->nombre,
+            ],
+        ]);
+    }
+
+
+    public function store(StoreEstudianteRequest $request)
+    {
+        // Creamos el usuario, como es creado por un usuario administrativo, se encuentra habilitado por defecto
+        $userData = $request->only(['nombre', 'apellido', 'email', 'telefono', 'password']);
+        $estudianteData = $request->only(['dni']);
+        $estudiante = $this->estudianteService->createEstudianteWithUser($userData, $estudianteData);
+        $estudiante->usuario->update(['habilitado' => true]);
+
+        return redirect()->route('administrativo.estudiantes.index')
+            ->with('success', 'Estudiante creado correctamente.');
     }
 }

@@ -171,4 +171,41 @@ class EstudianteControllerTest extends TestCase
             'dni' => '12345678',
         ]);
     }
+
+    public function un_administrativo_puede_crear_un_nuevo_estudiante()
+    {
+        // Arrange
+        $tipoAdministrativo = TipoUsuario::factory()->isAdministrativo()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoAdministrativo->id ]);
+        $administrativo = Administrativo::factory()->create([
+            'usuario_id' => $user->id
+        ]);
+
+        $payload = [
+            'nombre' => 'Ana',
+            'apellido' => 'García',
+            'email' => 'ana@example.com',
+            'telefono' => '3417778888',
+            'dni' => '22223333',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        // Act
+        $response = $this->actingAs($user)->post(route('administrativo.estudiantes.store'), $payload);
+
+        // Assert
+        $response->assertRedirect(route('administrativo.estudiantes.index'));
+
+        // Verificamos que se creó correctamente el usuario
+        $this->assertDatabaseHas('usuario', [
+            'nombre' => 'Ana',
+            'apellido' => 'García',
+            'email' => 'ana@example.com',
+        ]);
+
+        $this->assertDatabaseHas('estudiante', [
+            'dni' => '22223333',
+        ]);
+    }
 }

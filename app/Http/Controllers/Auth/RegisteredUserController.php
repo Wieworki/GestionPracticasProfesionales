@@ -20,7 +20,8 @@ class RegisteredUserController extends Controller
     protected $empresaService;
 
     public function __construct(
-        EstudianteService $estudianteService, EmpresaService $empresaService
+        EstudianteService $estudianteService, 
+        EmpresaService $empresaService
         )
     {
         $this->estudianteService = $estudianteService;

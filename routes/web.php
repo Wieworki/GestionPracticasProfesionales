@@ -98,7 +98,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('administrativo.estudiantes.edit');
         Route::patch('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'update'])
             ->name('administrativo.estudiantes.update');
-
+        Route::get('/administrativo/estudiantes/create', [EstudianteAdministrativoController::class, 'create'])
+            ->name('administrativo.estudiantes.create');
+        Route::post('/administrativo/estudiantes/store', [EstudianteAdministrativoController::class, 'store'])
+            ->name('administrativo.estudiantes.store');
     });
 
 });
