@@ -8,6 +8,7 @@ use App\Models\TipoUsuario;
 use App\Models\Administrativo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class EstudianteControllerTest extends TestCase
 {
@@ -75,4 +76,84 @@ class EstudianteControllerTest extends TestCase
         $response = $this->actingAs($estudiante)->get(route('administrativo.estudiantes.index'));
         $response->assertStatus(403);
     }
+
+    /** @test */
+    public function un_administrativo_puede_ver_el_detalle_de_un_estudiante()
+    {
+        $this->withoutExceptionHandling();
+
+        $tipoAdministrativo = TipoUsuario::factory()->isAdministrativo()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoAdministrativo->id ]);
+        $administrativo = Administrativo::factory()->create([
+            'usuario_id' => $user->id
+        ]);
+
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $userEstudiante = Usuario::factory()->habilitado()->create([
+            'tipo_id' => $tipoEstudiante->id,
+            'nombre' => 'Juan',
+            'apellido' => 'Pérez',
+            'telefono' => '3411234567',
+            'email' => 'juan@example.com',
+        ]);
+        $estudiante = Estudiante::factory()->create([
+            'usuario_id' => $userEstudiante->id,
+            'dni' => '12345678',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('administrativo.estudiantes.show', $estudiante->id));
+
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('administrativo/ShowEstudiante')
+            ->has('estudiante', fn (Assert $data) => $data
+                ->where('id', $estudiante->id)
+                ->where('nombre', 'Juan')
+                ->where('apellido', 'Pérez')
+                ->where('dni', '12345678')
+                ->where('telefono', '3411234567')
+                ->where('email', 'juan@example.com')
+                ->where('habilitado', true)
+                ->etc()
+            )
+        );
+
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    /*
+    public function un_administrativo_puede_actualizar_los_datos_de_un_estudiante()
+    {
+        $admin = User::factory()->create(['rol' => 'administrativo']);
+        $estudiante = Estudiante::factory()->create([
+            'nombre' => 'Juan',
+            'apellido' => 'Pérez',
+            'dni' => '12345678',
+            'telefono' => '3411234567',
+            'email' => 'juan@example.com',
+            'habilitado' => true,
+        ]);
+
+        $payload = [
+            'nombre' => 'Juan Carlos',
+            'apellido' => 'Pérez',
+            'dni' => '12345678',
+            'telefono' => '3419998888',
+            'email' => 'juancarlos@example.com',
+            'habilitado' => false,
+        ];
+
+        $response = $this->actingAs($admin)->patch(route('administrativo.estudiantes.update', $estudiante->id), $payload);
+
+        $response->assertRedirect(route('administrativo.estudiantes.show', $estudiante->id));
+
+        $this->assertDatabaseHas('estudiantes', [
+            'id' => $estudiante->id,
+            'nombre' => 'Juan Carlos',
+            'telefono' => '3419998888',
+            'email' => 'juancarlos@example.com',
+            'habilitado' => false,
+        ]);
+    }
+        */
 }

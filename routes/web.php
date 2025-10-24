@@ -92,8 +92,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/administrativo/estudiantes', [EstudianteAdministrativoController::class, 'index'])
             ->name('administrativo.estudiantes.index');
-        Route::get('/administrativo/estudiantes/show', [EstudianteAdministrativoController::class, 'index'])
+        Route::get('/administrativo/estudiantes/show/{id}', [EstudianteAdministrativoController::class, 'show'])
             ->name('administrativo.estudiantes.show');
+        Route::get('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'show'])
+            ->name('administrativo.estudiantes.edit'); //REVISAR
     });
 
 });

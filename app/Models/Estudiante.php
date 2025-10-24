@@ -20,6 +20,11 @@ class Estudiante extends Model
         'dni'
     ];
 
+    public function isHabilitado()
+    {
+        return $this->habilitado == 1;
+    }
+
     public function usuario(): HasOne
     {
         return $this->hasOne(Usuario::class, 'id', 'usuario_id');
@@ -30,9 +35,19 @@ class Estudiante extends Model
         return Attribute::get(fn() => $this->usuario?->nombre);
     }
 
+    protected function apellido(): Attribute
+    {
+        return Attribute::get(fn() => $this->usuario?->apellido);
+    }
+
     protected function email(): Attribute
     {
         return Attribute::get(fn() => $this->usuario?->email);
+    }
+
+    protected function telefono(): Attribute
+    {
+        return Attribute::get(fn() => $this->usuario?->telefono);
     }
 
     protected function habilitado(): Attribute
