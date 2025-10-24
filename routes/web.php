@@ -94,8 +94,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('administrativo.estudiantes.index');
         Route::get('/administrativo/estudiantes/show/{id}', [EstudianteAdministrativoController::class, 'show'])
             ->name('administrativo.estudiantes.show');
-        Route::get('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'show'])
-            ->name('administrativo.estudiantes.edit'); //REVISAR
+        Route::get('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'edit'])
+            ->name('administrativo.estudiantes.edit');
+        Route::patch('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'update'])
+            ->name('administrativo.estudiantes.update');
+
     });
 
 });

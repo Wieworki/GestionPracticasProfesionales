@@ -121,17 +121,25 @@ class EstudianteControllerTest extends TestCase
     }
 
     /** @test */
-    /*
+    
     public function un_administrativo_puede_actualizar_los_datos_de_un_estudiante()
     {
-        $admin = User::factory()->create(['rol' => 'administrativo']);
-        $estudiante = Estudiante::factory()->create([
+        $tipoAdministrativo = TipoUsuario::factory()->isAdministrativo()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoAdministrativo->id ]);
+        $administrativo = Administrativo::factory()->create([
+            'usuario_id' => $user->id
+        ]);
+
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $userEstudiante = Usuario::factory()->habilitado()->create([
+            'tipo_id' => $tipoEstudiante->id,
             'nombre' => 'Juan',
             'apellido' => 'Pérez',
-            'dni' => '12345678',
             'telefono' => '3411234567',
             'email' => 'juan@example.com',
-            'habilitado' => true,
+        ]);
+        $estudiante = Estudiante::factory()->create([
+            'dni' => '12345678',
         ]);
 
         $payload = [
@@ -143,17 +151,24 @@ class EstudianteControllerTest extends TestCase
             'habilitado' => false,
         ];
 
-        $response = $this->actingAs($admin)->patch(route('administrativo.estudiantes.update', $estudiante->id), $payload);
+        $response = $this->actingAs($user)->patch(
+            route('administrativo.estudiantes.update', $estudiante->id), 
+            $payload
+        );
 
         $response->assertRedirect(route('administrativo.estudiantes.show', $estudiante->id));
 
-        $this->assertDatabaseHas('estudiantes', [
-            'id' => $estudiante->id,
+        $this->assertDatabaseHas('usuario', [
+            'id' => $estudiante->usuario_id,
             'nombre' => 'Juan Carlos',
             'telefono' => '3419998888',
             'email' => 'juancarlos@example.com',
             'habilitado' => false,
         ]);
+
+        $this->assertDatabaseHas('estudiante', [
+            'id' => $estudiante->id,
+            'dni' => '12345678',
+        ]);
     }
-        */
 }

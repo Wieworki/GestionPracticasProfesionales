@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Estudiante;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Administrativo\UpdateEstudianteRequest;
 
 class EstudianteController extends Controller
 {
@@ -63,5 +64,39 @@ class EstudianteController extends Controller
                 'nombre' => $administrativo->nombre,
             ],
         ]);
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $usuario = $request->user();
+        $administrativo = $usuario->administrativo;
+
+        $estudiante = Estudiante::findOrFail($id);
+
+        return Inertia::render('administrativo/EditEstudiante', [
+            'estudiante' => [
+                'id' => $estudiante->id,
+                'nombre' => $estudiante->nombre,
+                'apellido' => $estudiante->apellido,
+                'email' => $estudiante->email,
+                'dni' => $estudiante->dni,
+                'telefono' => $estudiante->telefono,
+                'habilitado' => $estudiante->isHabilitado(),
+            ],
+            'administrativo' => [
+                'nombre' => $usuario->nombre,
+            ],
+        ]);
+    }
+
+    public function update(UpdateEstudianteRequest $request, $id)
+    {
+        $estudiante = Estudiante::findOrFail($id);
+
+        $estudiante->usuario->update($request->only(['nombre', 'apellido', 'email', 'telefono', 'habilitado']));
+        $estudiante->update($request->only(['dni']));
+
+        return redirect()->route('administrativo.estudiantes.show', $estudiante->id)
+                         ->with('success', 'Datos del estudiante actualizados correctamente.');
     }
 }
