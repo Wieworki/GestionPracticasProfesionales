@@ -30,6 +30,7 @@ class UsuarioFactory extends Factory
     {
         return [
             'nombre' => fake()->name(),
+            'apellido' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -60,6 +61,13 @@ class UsuarioFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'habilitado' => true,
+        ]);
+    }
+
+    public function changePassword($password): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'password' => Hash::make($password),
         ]);
     }
 }

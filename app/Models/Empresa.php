@@ -31,6 +31,15 @@ class Empresa extends Model
         return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
     }
 
+    public function convenio()
+    {
+        if ($this->habilitado) {
+            return "Firmado";
+        } else {
+            return "Sin firmar";
+        }
+    }
+
     protected function nombre(): Attribute
     {
         return Attribute::get(fn() => $this->usuario?->nombre);

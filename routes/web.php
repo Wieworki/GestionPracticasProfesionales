@@ -11,8 +11,12 @@ use App\Http\Controllers\Dashboard\EmpresaDashboardController;
 use App\Http\Controllers\Dashboard\AdministrativoDashboardController;
 use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 use App\Http\Controllers\Empresa\PerfilController as EmpresaPerfil;
+use App\Http\Controllers\Empresa\OfertaController as EmpresaOferta;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
+use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteController;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
+use App\Http\Controllers\Administrativo\EmpresaController as EmpresaAdministrativoController;
+use App\Http\Controllers\Administrativo\EstudianteController as EstudianteAdministrativoController;
 use App\Http\Controllers\Auth\PasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -43,6 +47,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/empresa/dashboard', [EmpresaDashboardController::class, 'index'])->name('empresa.dashboard');
         Route::get('/empresa/perfil/edit', [EmpresaController::class, 'edit'])->name('empresa.edit');
         Route::patch('/empresa/perfil', [EmpresaController::class, 'update'])->name('empresa.update');
+
+        Route::get('/empresa/ofertas/nueva', [EmpresaOferta::class, 'create'])
+            ->name('empresa.ofertas.create');
+
+        Route::post('/empresa/ofertas', [EmpresaOferta::class, 'store'])
+            ->name('empresa.ofertas.store');
+
+        Route::get('/empresa/ofertas/index', [EmpresaOferta::class, 'index'])
+            ->name('empresa.ofertas.index');
+
+        Route::get('/empresa/ofertas/show', [EmpresaOferta::class, 'index'])
+            ->name('empresa.ofertas.show'); // REVISAR
     });
 
     Route::middleware('checkUserType:estudiante')->group(function () {
@@ -53,6 +69,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/estudiante/empresas', [EmpresaController::class, 'indexEstudiante'])
             ->name('estudiante.empresas.index');
+        Route::get('/estudiante/empresas/show/{id}', [EmpresaEstudianteController::class, 'show'])
+            ->name('estudiante.empresas.show');
     });
 
     Route::middleware('checkUserType:administrativo')->group(function () {
@@ -63,6 +81,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/administrativo/empresas', [EmpresaController::class, 'indexAdministrativo'])
             ->name('administrativo.empresas.index');
+        Route::get('/administrativo/empresas/show/{id}', [EmpresaAdministrativoController::class, 'show'])
+            ->name('administrativo.empresas.show');
+        Route::patch('/administrativo/empresas/convenio', [EmpresaAdministrativoController::class, 'confirmarConvenio'])
+            ->name('administrativo.empresas.convenio');
+        Route::get('/administrativo/empresas/create', [EmpresaController::class, 'indexAdministrativo'])
+            ->name('administrativo.empresas.create'); //REVISAR
+        Route::get('/administrativo/empresas/edit', [EmpresaController::class, 'indexAdministrativo'])
+            ->name('administrativo.empresas.edit'); //REVISAR
+
+        Route::get('/administrativo/estudiantes', [EstudianteAdministrativoController::class, 'index'])
+            ->name('administrativo.estudiantes.index');
+        Route::get('/administrativo/estudiantes/show/{id}', [EstudianteAdministrativoController::class, 'show'])
+            ->name('administrativo.estudiantes.show');
+        Route::get('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'edit'])
+            ->name('administrativo.estudiantes.edit');
+        Route::patch('/administrativo/estudiantes/edit/{id}', [EstudianteAdministrativoController::class, 'update'])
+            ->name('administrativo.estudiantes.update');
+
     });
 
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import Sidebar from '@/components/dashboard/sidebar';
 import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
 
 interface Props {
     children: React.ReactNode;
@@ -20,9 +21,11 @@ export default function AdministrativoLayout({ children, nombre }: Props) {
     ];
 
     return (
-        <div className="flex min-h-screen bg-gray-50 text-gray-800">
-            <Sidebar nombre={nombre} navItems={navItems} />
-            <main className="flex-1 p-6">{children}</main>
-        </div>
+        <AppLayout>
+            <div className="flex min-h-screen bg-gray-50 text-gray-800">
+                <Sidebar nombre={nombre} navItems={navItems} />
+                <main className="flex-1 p-6">{children}</main>
+            </div>
+        </AppLayout>
     );
 }
