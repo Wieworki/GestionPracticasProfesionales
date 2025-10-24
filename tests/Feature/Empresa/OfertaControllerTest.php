@@ -9,6 +9,7 @@ use App\Models\TipoUsuario;
 use App\Models\Oferta;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class OfertaControllerTest extends TestCase
 {
@@ -160,5 +161,56 @@ class OfertaControllerTest extends TestCase
             ->has('ofertas.data', 1)
             ->where('ofertas.data.0.titulo', 'Backend Developer')
         );
+    }
+
+     /** @test */
+    public function una_empresa_puede_ver_el_detalle_de_su_oferta()
+    {
+        // Arrange
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuario = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'titulo' => 'Pasantía en Desarrollo Web',
+            'descripcion' => 'Buscamos estudiante con conocimientos en Laravel.',
+            'fecha_cierre' => now()->addDays(15),
+            'modalidad' => 'Presencial',
+            'estado' => 'Activa',
+        ]);
+
+        // Act
+        $response = $this->actingAs($usuario)->get(
+            route('empresa.ofertas.show', $oferta->id)
+        );
+
+        $response->assertStatus(200)
+                 ->assertInertia(fn ($page) => $page
+                     ->component('empresa/ShowOferta')
+                     ->where('oferta.id', $oferta->id)
+                 );
+    }
+
+    /** @test */
+    public function una_empresa_no_puede_ver_el_detalle_de_una_oferta_que_no_es_suya()
+    {
+        // Arrange
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuario = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresaPropietaria = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+
+        $otroUsuario = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $otraEmpresa = Empresa::factory()->create(['usuario_id' => $otroUsuario->id]);
+
+        $oferta = Oferta::factory()->create(['empresa_id' => $empresaPropietaria->id]);
+
+        // Act
+        $response = $this->actingAs($otraEmpresa->usuario)->get(
+            route('empresa.ofertas.show', $oferta->id)
+        );
+
+        // Assert
+        $response->assertStatus(403);
     }
 }

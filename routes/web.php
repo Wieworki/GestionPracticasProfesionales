@@ -57,8 +57,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/empresa/ofertas/index', [EmpresaOferta::class, 'index'])
             ->name('empresa.ofertas.index');
 
-        Route::get('/empresa/ofertas/show', [EmpresaOferta::class, 'index'])
-            ->name('empresa.ofertas.show'); // REVISAR
+        Route::get('/empresa/ofertas/show/{id}', [EmpresaOferta::class, 'show'])
+            ->name('empresa.ofertas.show');
+
+        Route::get('/empresa/ofertas/edit/{id}', [EmpresaOferta::class, 'show'])
+            ->name('empresa.ofertas.edit'); // REVISAR
+
+        Route::get('/empresa/ofertas/postulantes/{id}', [EmpresaOferta::class, 'show'])
+            ->name('empresa.ofertas.postulantes'); // REVISAR
+
+        Route::delete('/empresa/ofertas/destroy/{id}', [EmpresaOferta::class, 'show'])
+            ->name('empresa.ofertas.destroy'); // REVISAR
     });
 
     Route::middleware('checkUserType:estudiante')->group(function () {

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Requests\StoreOfertaRequest;
 use App\Models\Carrera;
+use App\Models\Oferta;
 
 class OfertaController extends Controller
 {
@@ -83,5 +84,30 @@ class OfertaController extends Controller
         return redirect()
             ->route('empresa.dashboard')
             ->with('success', 'Oferta creada correctamente y pendiente de aprobación.');
+    }
+
+    public function show(Request $request, $id)
+    {
+        $oferta = Oferta::findOrFail($id);
+
+        // Autorización: solo la empresa propietaria puede ver la oferta
+        $empresa = auth()->user()->empresa;
+        if ($oferta->empresa_id !== $empresa->id) {
+            abort(403, 'No tiene permiso para acceder a esta oferta.');
+        }
+
+        return Inertia::render('empresa/ShowOferta', [
+            'oferta' => [
+                'id' => $oferta->id,
+                'titulo' => $oferta->titulo,
+                'descripcion' => $oferta->descripcion,
+                'fecha_cierre' => $oferta->fecha_cierre->format('d/m/Y'),
+                'modalidad' => $oferta->modalidad,
+                'estado' => $oferta->estado,
+            ],
+            'empresa' => [
+                'nombre' => $empresa->usuario->nombre,
+            ],
+        ]);
     }
 }
