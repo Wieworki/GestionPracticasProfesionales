@@ -17,6 +17,7 @@ use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteContro
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
 use App\Http\Controllers\Administrativo\EmpresaController as EmpresaAdministrativoController;
 use App\Http\Controllers\Administrativo\EstudianteController as EstudianteAdministrativoController;
+use App\Http\Controllers\Administrativo\OfertaController as OfertaAdministrativoController;
 use App\Http\Controllers\Auth\PasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -101,6 +102,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('administrativo.empresas.create');
         Route::post('/administrativo/empresas/store', [EmpresaAdministrativoController::class, 'store'])
             ->name('administrativo.empresas.store');
+
+        Route::get('/administrativo/ofertas/index', [OfertaAdministrativoController::class, 'index'])
+            ->name('administrativo.ofertas.index');
+        Route::get('/administrativo/ofertas/show/{id}', [OfertaAdministrativoController::class, 'index'])
+            ->name('administrativo.oferta.show');
 
         Route::get('/administrativo/estudiantes', [EstudianteAdministrativoController::class, 'index'])
             ->name('administrativo.estudiantes.index');

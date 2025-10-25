@@ -52,7 +52,6 @@ export default function ListadoEstudiantes({
 
   return (
     <div>
-      {/* Buscador */}
       <div className="flex justify-between items-center mb-4">
         <form onSubmit={handleSearch} className="flex gap-2 w-full max-w-md">
           <input
@@ -77,8 +76,6 @@ export default function ListadoEstudiantes({
           Nuevo estudiante
         </Link>
       </div>
-
-      {/* Tabla */}
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full border-collapse">
           <thead className="bg-gray-50">
