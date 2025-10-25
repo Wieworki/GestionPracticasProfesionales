@@ -8,7 +8,8 @@ use App\Repositories\OfertaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use App\Http\Requests\StoreOfertaRequest;
+use App\Http\Requests\Empresa\StoreOfertaRequest;
+use App\Http\Requests\Empresa\UpdateOfertaRequest;
 use App\Models\Carrera;
 use App\Models\Oferta;
 
@@ -38,7 +39,7 @@ class OfertaController extends Controller
             search: $request->input('search')
         );
 
-        return Inertia::render('empresa/MisOfertas', [
+        return Inertia::render('empresa/ofertas/MisOfertas', [
             'empresa' => [
                 'nombre' => $empresa->nombre,
             ],
@@ -56,7 +57,7 @@ class OfertaController extends Controller
     {
         $usuario = $request->user();
 
-        return Inertia::render('empresa/NuevaOferta', [
+        return Inertia::render('empresa/ofertas/NuevaOferta', [
             'empresa' => [
                 'nombre' => $usuario->nombre,
             ],
@@ -96,7 +97,7 @@ class OfertaController extends Controller
             abort(403, 'No tiene permiso para acceder a esta oferta.');
         }
 
-        return Inertia::render('empresa/ShowOferta', [
+        return Inertia::render('empresa/ofertas/ShowOferta', [
             'oferta' => [
                 'id' => $oferta->id,
                 'titulo' => $oferta->titulo,
@@ -109,5 +110,46 @@ class OfertaController extends Controller
                 'nombre' => $empresa->usuario->nombre,
             ],
         ]);
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $oferta = Oferta::findOrFail($id);
+        $empresa = Auth::user()->empresa;
+
+        if ($oferta->empresa_id !== $empresa->id) {
+            abort(403);
+        }
+
+        if ($oferta->estado === 'Finalizada') {
+            abort(403, 'No se puede editar una oferta finalizada.');
+        }
+
+        return inertia('empresa/ofertas/EditOferta', [
+            'empresa' => $empresa,
+            'oferta' => [
+                'id' => $oferta->id,
+                'titulo' => $oferta->titulo,
+                'descripcion' => $oferta->descripcion,
+                'fecha_cierre' => $oferta->fecha_cierre->format('Y-m-d'),
+                'modalidad' => $oferta->modalidad,
+                'estado' => $oferta->estado,
+            ],
+        ]);
+    }
+
+    public function update(UpdateOfertaRequest $request, $id)
+    {
+        $oferta = Oferta::findOrFail($id);
+        $empresa = Auth::user()->empresa;
+
+        if ($oferta->empresa_id !== $empresa->id || $oferta->estado === 'Finalizada') {
+            abort(403);
+        }
+
+        $oferta->update($request->validated());
+
+        return redirect()->route('empresa.ofertas.show', $oferta->id)
+                         ->with('success', 'Oferta actualizada correctamente.');
     }
 }

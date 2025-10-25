@@ -73,7 +73,7 @@ export default function NuevaOferta() {
             <select
               value={data.modalidad}
               onChange={(e) => setData('modalidad', e.target.value)}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"
             >
               <option value="">Seleccionar...</option>
               <option value="Presencial">Presencial</option>

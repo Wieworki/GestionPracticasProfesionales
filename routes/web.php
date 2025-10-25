@@ -60,8 +60,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/empresa/ofertas/show/{id}', [EmpresaOferta::class, 'show'])
             ->name('empresa.ofertas.show');
 
-        Route::get('/empresa/ofertas/edit/{id}', [EmpresaOferta::class, 'show'])
-            ->name('empresa.ofertas.edit'); // REVISAR
+        Route::get('/empresa/ofertas/edit/{id}', [EmpresaOferta::class, 'edit'])
+            ->name('empresa.ofertas.edit');
+
+        Route::patch('/empresa/ofertas/edit/{id}', [EmpresaOferta::class, 'update'])
+            ->name('empresa.ofertas.update');
 
         Route::get('/empresa/ofertas/postulantes/{id}', [EmpresaOferta::class, 'show'])
             ->name('empresa.ofertas.postulantes'); // REVISAR
