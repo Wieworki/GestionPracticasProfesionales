@@ -12,6 +12,7 @@ use App\Http\Requests\Empresa\StoreOfertaRequest;
 use App\Http\Requests\Empresa\UpdateOfertaRequest;
 use App\Models\Carrera;
 use App\Models\Oferta;
+use Illuminate\Support\Facades\Log;
 
 class OfertaController extends Controller
 {
@@ -89,6 +90,7 @@ class OfertaController extends Controller
 
     public function show(Request $request, $id)
     {
+        /** @var Oferta $oferta */
         $oferta = Oferta::findOrFail($id);
 
         // Autorización: solo la empresa propietaria puede ver la oferta
@@ -105,6 +107,8 @@ class OfertaController extends Controller
                 'fecha_cierre' => $oferta->fecha_cierre->format('d/m/Y'),
                 'modalidad' => $oferta->modalidad,
                 'estado' => $oferta->estado,
+                'isEditable' => $oferta->canBeEdited(),
+                'canBeDeleted' => $oferta->canBeDeleted()
             ],
             'empresa' => [
                 'nombre' => $empresa->usuario->nombre,
@@ -114,6 +118,7 @@ class OfertaController extends Controller
 
     public function edit(Request $request, $id)
     {
+        /** @var Oferta $oferta */
         $oferta = Oferta::findOrFail($id);
         $empresa = Auth::user()->empresa;
 
@@ -121,8 +126,8 @@ class OfertaController extends Controller
             abort(403);
         }
 
-        if ($oferta->estado === 'Finalizada') {
-            abort(403, 'No se puede editar una oferta finalizada.');
+        if (!$oferta->canBeEdited()) {
+            abort(403, 'No se puede editar esta oferta.');
         }
 
         return inertia('empresa/ofertas/EditOferta', [
@@ -143,7 +148,7 @@ class OfertaController extends Controller
         $oferta = Oferta::findOrFail($id);
         $empresa = Auth::user()->empresa;
 
-        if ($oferta->empresa_id !== $empresa->id || $oferta->estado === 'Finalizada') {
+        if ($oferta->empresa_id !== $empresa->id || !$oferta->canBeEdited()) {
             abort(403);
         }
 
@@ -151,5 +156,22 @@ class OfertaController extends Controller
 
         return redirect()->route('empresa.ofertas.show', $oferta->id)
                          ->with('success', 'Oferta actualizada correctamente.');
+    }
+
+    public function eliminar($ofertaId)
+    {
+        $oferta = Oferta::findOrFail($ofertaId);
+        $empresa = auth()->user()->empresa;
+
+        // Validar que la oferta pertenece a la empresa autenticada
+        if ($oferta->empresa_id !== $empresa->id) {
+            abort(403, 'No autorizado');
+        }
+
+        $oferta->update(['estado' => Oferta::ESTADO_ELIMINADA]);
+
+        return redirect()
+            ->route('empresa.ofertas.index')
+            ->with('success', 'La oferta fue marcada como eliminada.');
     }
 }

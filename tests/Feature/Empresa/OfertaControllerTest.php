@@ -301,4 +301,57 @@ class OfertaControllerTest extends TestCase
 
         $this->assertDatabaseMissing('oferta', ['titulo' => 'Cambio no permitido']);
     }
+
+    /** @test */
+    public function una_empresa_puede_eliminar_una_oferta_que_le_pertenece()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuario = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+
+        // Act
+        $response = $this->actingAs($usuario)
+            ->patch(route('empresa.ofertas.eliminar', $oferta->id));
+
+        // Assert
+        $response->assertRedirect(route('empresa.ofertas.index'));
+        $response->assertSessionHas('success', 'La oferta fue marcada como eliminada.');
+
+        $this->assertDatabaseHas('oferta', [
+            'id' => $oferta->id,
+            'estado' => Oferta::ESTADO_ELIMINADA,
+        ]);
+    }
+
+    /** @test */
+    public function una_empresa_no_puede_eliminar_una_oferta_que_no_le_pertenece()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuario = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+
+        $otroUsuario = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $otraEmpresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+
+        $ofertaDeOtraEmpresa = Oferta::factory()->create([
+            'empresa_id' => $otraEmpresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+
+        // Act
+        $response = $this->actingAs($usuario)
+            ->patch(route('empresa.ofertas.eliminar', $ofertaDeOtraEmpresa->id));
+
+        // Assert
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('oferta', [
+            'id' => $ofertaDeOtraEmpresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA, // No se modificó
+        ]);
+    }
 }

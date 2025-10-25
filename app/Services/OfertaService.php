@@ -34,7 +34,7 @@ class OfertaService
                 'descripcion' => $data['descripcion'],
                 'fecha_creacion' => now(),
                 'fecha_cierre' => $data['fecha_cierre'],
-                'estado' => 'Pendiente',
+                'estado' => OFERTA::ESTADO_PENDIENTE,
                 'modalidad' => $data['modalidad'],
             ]);
 

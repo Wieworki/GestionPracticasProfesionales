@@ -14,16 +14,18 @@ interface Props {
     fecha_cierre: string;
     modalidad: string;
     estado: string;
+    isEditable: boolean;
+    canBeDeleted: boolean;
   };
 }
 
 export default function ShowOferta({ empresa, oferta }: Props) {
-  const { delete: destroy, processing } = useForm({});
+  const { patch, processing } = useForm({});
 
   const handleDelete = (e: React.FormEvent) => {
     e.preventDefault();
     if (confirm('¿Estás seguro de que deseas eliminar esta oferta?')) {
-      destroy(route('empresa.ofertas.destroy', oferta.id));
+      patch(route('empresa.ofertas.eliminar', oferta.id));
     }
   };
 
@@ -63,12 +65,14 @@ export default function ShowOferta({ empresa, oferta }: Props) {
             </Button>
           </Link>
 
-          <div className="flex gap-3 w-full sm:w-auto justify-end">
-            <Link href={route('empresa.ofertas.edit', oferta.id)}>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
-                Modificar
-              </Button>
-            </Link>
+            <div className="flex gap-3 w-full sm:w-auto justify-end">
+            {oferta.isEditable && (
+                <Link href={route('empresa.ofertas.edit', oferta.id)}>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto">
+                    Modificar
+                  </Button>
+                </Link>
+            )}
 
             <Link href={route('empresa.ofertas.postulantes', oferta.id)}>
               <Button variant="default" className="w-full sm:w-auto">
@@ -76,15 +80,17 @@ export default function ShowOferta({ empresa, oferta }: Props) {
               </Button>
             </Link>
 
-            <form onSubmit={handleDelete}>
-              <Button
-                type="submit"
-                disabled={processing}
-                className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
-              >
-                Eliminar
-              </Button>
-            </form>
+            {oferta.canBeDeleted && (
+              <form onSubmit={handleDelete}>
+                <Button
+                  type="submit"
+                  disabled={processing}
+                  className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
+                >
+                  Eliminar
+                </Button>
+              </form>
+            )}
           </div>
         </footer>
       </div>

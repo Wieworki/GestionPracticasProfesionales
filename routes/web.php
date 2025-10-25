@@ -69,8 +69,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/empresa/ofertas/postulantes/{id}', [EmpresaOferta::class, 'show'])
             ->name('empresa.ofertas.postulantes'); // REVISAR
 
-        Route::delete('/empresa/ofertas/destroy/{id}', [EmpresaOferta::class, 'show'])
-            ->name('empresa.ofertas.destroy'); // REVISAR
+        Route::patch('/empresa/ofertas/eliminar/{id}', [EmpresaOferta::class, 'eliminar'])
+            ->name('empresa.ofertas.eliminar');
     });
 
     Route::middleware('checkUserType:estudiante')->group(function () {
