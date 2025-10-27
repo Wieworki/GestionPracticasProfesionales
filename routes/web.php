@@ -105,8 +105,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/administrativo/ofertas/index', [OfertaAdministrativoController::class, 'index'])
             ->name('administrativo.ofertas.index');
-        Route::get('/administrativo/ofertas/show/{id}', [OfertaAdministrativoController::class, 'index'])
+        Route::get('/administrativo/ofertas/show/{id}', [OfertaAdministrativoController::class, 'show'])
             ->name('administrativo.oferta.show');
+        Route::get('/administrativo/ofertas/confirmar/{id}', [OfertaAdministrativoController::class, 'index'])
+            ->name('administrativo.oferta.confirmarVisibilidad');
 
         Route::get('/administrativo/estudiantes', [EstudianteAdministrativoController::class, 'index'])
             ->name('administrativo.estudiantes.index');

@@ -60,4 +60,34 @@ class OfertasControllerTest extends TestCase
         $response = $this->get(route('administrativo.ofertas.index'));
         $response->assertRedirect(route('login'));
     }
+
+     /** @test */
+    public function un_administrativo_puede_ver_el_detalle_de_una_oferta()
+    {
+        $tipoAdministrativo = TipoUsuario::factory()->isAdministrativo()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoAdministrativo->id ]);
+        $administrativo = Administrativo::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $userEmpresa->id ]);
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'titulo' => 'Desarrollador Fullstack',
+            'estado' => Oferta::ESTADO_PENDIENTE,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('administrativo.oferta.show', $oferta->id));
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) =>
+            $page->component('administrativo/ofertas/ShowOferta')
+                ->where('oferta.id', $oferta->id)
+                ->where('oferta.titulo', 'Desarrollador Fullstack')
+                ->where('oferta.estado', Oferta::ESTADO_PENDIENTE)
+                ->where('oferta.empresa', $oferta->empresa->usuario->nombre)
+                ->where('oferta.canBeVisible', true)
+        );
+    }
 }

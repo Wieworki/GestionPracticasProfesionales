@@ -8,6 +8,7 @@ use App\Repositories\OfertaRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
+use App\Models\Oferta;
 
 class OfertaController extends Controller
 {
@@ -37,6 +38,28 @@ class OfertaController extends Controller
             'ofertas' => $ofertas,
             'filters' => [
                 'search' => $search,
+            ],
+            'nombre' => $usuario->nombre,
+        ]);
+    }
+
+    public function show(Request $request, $id)
+    {
+        $usuario = $request->user();
+        /** @var Oferta $oferta */
+        $oferta = Oferta::findOrFail($id);
+
+        return Inertia::render('administrativo/ofertas/ShowOferta', [
+            'oferta' => [
+                'id' => $oferta->id,
+                'titulo' => $oferta->titulo,
+                'descripcion' => $oferta->descripcion,
+                'fecha_creacion' => $oferta->created_at->format('d/m/Y'),
+                'fecha_cierre' => $oferta->fecha_cierre->format('d/m/Y'),
+                'modalidad' => $oferta->modalidad,
+                'estado' => $oferta->estado,
+                'canBeVisible' => $oferta->isPendiente(),
+                'empresa' => $oferta->empresa->usuario->nombre,
             ],
             'nombre' => $usuario->nombre,
         ]);
