@@ -78,3 +78,25 @@ export const columnasEmpresa: ColumnDef<Oferta>[] = [
     ),
   },
 ];
+
+export const columnasEstudiante: ColumnDef<Oferta>[] = [
+  ...columnasBase,
+  {
+    accessorKey: 'empresa',
+    header: 'Empresa',
+  },
+  {
+    id: 'acciones',
+    header: 'Acciones',
+    cell: ({ row }) => (
+      <div className="flex gap-2">
+        <Link
+          href={route('estudiante.oferta.show', row.original.id)}
+          className="text-blue-600 hover:underline"
+        >
+          Ver
+        </Link>
+      </div>
+    ),
+  },
+];
