@@ -64,4 +64,19 @@ class OfertaController extends Controller
             'nombre' => $usuario->nombre,
         ]);
     }
+
+    public function confirmarVisibilidad($ofertaId)
+    {
+        $oferta = Oferta::findOrFail($ofertaId);
+
+        if (!$oferta->isPendiente()) {
+            abort(403, 'No se puede confirmar visibilidad de esta oferta');
+        }
+
+        $oferta->update(['estado' => Oferta::ESTADO_ACTIVA]);
+
+        return redirect()
+            ->route('administrativo.ofertas.index')
+            ->with('success', 'La oferta fue marcada como visible.');
+    }
 }

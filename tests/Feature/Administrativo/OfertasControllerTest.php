@@ -90,4 +90,58 @@ class OfertasControllerTest extends TestCase
                 ->where('oferta.canBeVisible', true)
         );
     }
+
+    /** @test */
+    public function un_administrativo_puede_poner_visible_una_oferta_pendiente()
+    {
+        $tipoAdministrativo = TipoUsuario::factory()->isAdministrativo()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoAdministrativo->id ]);
+        $administrativo = Administrativo::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuarioEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuarioEmpresa->id]);
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'estado' => Oferta::ESTADO_PENDIENTE,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('administrativo.oferta.confirmarVisibilidad', $oferta->id));
+
+        $response->assertRedirect(route('administrativo.ofertas.index'));
+        $response->assertSessionHas('success', 'La oferta fue marcada como visible.');
+
+        $this->assertDatabaseHas('oferta', [
+            'id' => $oferta->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+    }
+
+    /** @test */
+    public function un_administrativo_no_puede_poner_visible_una_oferta_eliminada()
+    {
+        $tipoAdministrativo = TipoUsuario::factory()->isAdministrativo()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoAdministrativo->id ]);
+        $administrativo = Administrativo::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuarioEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuarioEmpresa->id]);
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'estado' => Oferta::ESTADO_ELIMINADA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('administrativo.oferta.confirmarVisibilidad', $oferta->id));
+
+        // Assert
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('oferta', [
+            'id' => $oferta->id,
+            'estado' => Oferta::ESTADO_ELIMINADA, // No se modificó
+        ]);
+    }
 }
