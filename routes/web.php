@@ -88,7 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/estudiante/ofertas/index', [OfertaEstudianteController::class, 'index'])
             ->name('estudiante.ofertas.index');
-        Route::get('/estudiante/ofertas/show/{id}', [OfertaEstudianteController::class, 'index'])
+        Route::get('/estudiante/ofertas/show/{id}', [OfertaEstudianteController::class, 'show'])
             ->name('estudiante.oferta.show');
         Route::patch('/estudiante/ofertas/confirmar/{id}', [OfertaEstudianteController::class, 'index'])
             ->name('estudiante.oferta.postular');

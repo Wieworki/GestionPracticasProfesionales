@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\OfertaService;
 use App\Repositories\OfertaRepository;
+use Illuminate\Support\Facades\Log;
 
 class OfertaController extends Controller
 {
@@ -38,6 +39,28 @@ class OfertaController extends Controller
                 'search' => $search,
             ],
             'nombre' => $usuario->nombre,
+        ]);
+    }
+
+    public function show(Request $request, int $id)
+    {
+        $usuario = $request->user();
+        $estudianteId = $usuario->estudiante->id;
+
+        $oferta = $this->ofertaService->getVisibleOfertaForEstudiante($id);
+        $canPostularse = $this->ofertaService->canEstudiantePostularse($oferta, $estudianteId);
+
+        return Inertia::render('estudiante/ofertas/ShowOferta', [
+            'oferta' => [
+                'id' => $oferta->id,
+                'titulo' => $oferta->titulo,
+                'descripcion' => $oferta->descripcion,
+                'fecha_cierre' => $oferta->fecha_cierre->format('d/m/Y'),
+                'modalidad' => $oferta->modalidad,
+                'estado' => $oferta->estado,
+                'canPostularse' => $canPostularse
+            ],
+            'nombre' => $usuario->nombre
         ]);
     }
 }

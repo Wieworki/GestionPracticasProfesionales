@@ -39,6 +39,11 @@ class Oferta extends Model
         return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
     }
 
+    public function postulaciones()
+    {
+        return $this->hasMany(Postulacion::class, 'oferta_id', 'id');
+    }
+
     public function canBeEdited()
     {
         return (!$this->isEliminada() && !$this->isFinalizada());
@@ -47,6 +52,11 @@ class Oferta extends Model
     public function canBeDeleted()
     {
         return (!$this->isEliminada() && !$this->isFinalizada());
+    }
+
+    public function isVisibileForEstudiante()
+    {
+        return ($this->isActiva() || $this->isFinalizada());
     }
 
     public function isPendiente()

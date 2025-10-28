@@ -100,4 +100,31 @@ class OfertaRepository
 
         return $query->paginate($perPage)->withQueryString();
     }
+
+    
+    public function getPostulados($idOferta)
+    {
+        $query = DB::table('oferta')
+        ->join('postulacion', 'postulacion.oferta_id', '=', 'oferta.id')
+        ->join('estudiante', 'postulacion.estudiante_id', '=', 'estudiante.id')
+        ->join('usuario', 'estudiante.usuario_id', '=', 'usuario.id')
+        ->select(
+            'oferta.id',
+            'usuario.nombre',
+            'postulacion.fecha_creacion'
+        )
+        ->where('oferta.id', $idOferta)
+        ->orderBy('postulacion.created_at', 'desc');
+
+        return $query->get();
+    }
+
+    public function getPostulacion($idOferta, $estudianteId)
+    {
+        $query = DB::table('postulacion')
+        ->where('oferta_id', $idOferta)
+        ->where('estudiante_id', $estudianteId);
+        
+        return $query->get();
+    }
 }

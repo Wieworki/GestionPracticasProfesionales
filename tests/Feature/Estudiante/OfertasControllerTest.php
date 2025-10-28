@@ -46,4 +46,92 @@ class OfertasControllerTest extends TestCase
                 ->where('ofertas.data.0.titulo', $ofertas[0]->titulo)
         );
     }
+
+    //
+    /** @test */
+    public function un_estudiante_puede_ver_una_oferta_visible_y_activa()
+    {
+        // Arrange
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaHabilitada = Usuario::factory()->habilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaHabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaHabilitada->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresaHabilitada->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('estudiante.oferta.show', $oferta->id));
+
+        $response->assertStatus(200)
+                 ->assertInertia(fn ($page) =>
+                    $page->component('estudiante/ofertas/ShowOferta')
+                        ->where('oferta.id', $oferta->id)
+                        ->where('oferta.titulo', $oferta->titulo)
+                        ->where('oferta.estado', Oferta::ESTADO_ACTIVA)
+                 );
+    }
+
+    /** @test */
+    public function un_estudiante_no_puede_ver_una_oferta_eliminada()
+    {
+        // Arrange
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaHabilitada = Usuario::factory()->habilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaHabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaHabilitada->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresaHabilitada->id,
+            'estado' => Oferta::ESTADO_ELIMINADA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('estudiante.oferta.show', $oferta->id));
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function un_estudiante_no_puede_ver_una_oferta_de_una_empresa_no_habilitada()
+    {
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaDeshabilitada = Usuario::factory()->deshabilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaDeshabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaDeshabilitada->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresaDeshabilitada->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get(route('estudiante.oferta.show', $oferta->id));
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function un_usuario_no_autenticado_no_puede_ver_el_detalle_de_una_oferta()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaHabilitada = Usuario::factory()->habilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaHabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaHabilitada->id ]);
+
+
+        $oferta = Oferta::factory()->create(['empresa_id' => $empresaHabilitada]);
+        $response = $this->get(route('estudiante.oferta.show', $oferta->id));
+        $response->assertRedirect(route('login'));
+    }
 }
