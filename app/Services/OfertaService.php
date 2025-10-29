@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Oferta;
 use App\Models\Carrera;
 use App\Models\Empresa;
+use App\Models\Postulacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -81,5 +82,14 @@ class OfertaService
             ->where('estudiante_id', $estudianteId)
             ->exists()
             && $oferta->isActiva();
+    }
+
+    public function nuevaPostulacion(Oferta $oferta, int $estudianteId)
+    {
+        return Postulacion::create([
+            'oferta_id' => $oferta->id,
+            'estudiante_id' => $estudianteId,
+            'fecha_creacion' => now(),
+        ]);
     }
 }

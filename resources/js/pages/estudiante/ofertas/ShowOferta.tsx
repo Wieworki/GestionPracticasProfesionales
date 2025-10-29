@@ -22,7 +22,7 @@ export default function ShowOferta({ nombre, oferta }: Props) {
   const handlePostulacion = (e: React.FormEvent) => {
     e.preventDefault();
     if (confirm('¿Estás seguro de que desea postularse esta oferta?')) {
-      patch(route('empresa.ofertas.eliminar', oferta.id));
+      patch(route('estudiante.oferta.postular', oferta.id));
     }
   };
 

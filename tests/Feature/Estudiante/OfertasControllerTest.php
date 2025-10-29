@@ -7,6 +7,7 @@ use App\Models\TipoUsuario;
 use App\Models\Estudiante;
 use App\Models\Empresa;
 use App\Models\Oferta;
+use App\Models\Postulacion;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -133,5 +134,85 @@ class OfertasControllerTest extends TestCase
         $oferta = Oferta::factory()->create(['empresa_id' => $empresaHabilitada]);
         $response = $this->get(route('estudiante.oferta.show', $oferta->id));
         $response->assertRedirect(route('login'));
+    }
+
+    //
+     /** @test */
+    public function un_estudiante_puede_postularse_a_una_oferta_activa_visible_y_no_postulada()
+    {
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaHabilitada = Usuario::factory()->habilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaHabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaHabilitada->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresaHabilitada->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('estudiante.oferta.postular', $oferta->id));
+
+        $response->assertRedirect(route('estudiante.oferta.show', $oferta->id));
+        $response->assertSessionHas('success', 'Postulacion exitosa.');
+
+        $this->assertDatabaseHas('postulacion', [
+            'oferta_id' => $oferta->id,
+            'estudiante_id' => $estudiante->id,
+        ]);
+    }
+
+    /** @test */
+    public function no_puede_postularse_si_la_oferta_no_es_visible()
+    {
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaHabilitada = Usuario::factory()->habilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaHabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaHabilitada->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresaHabilitada->id,
+            'estado' => Oferta::ESTADO_ELIMINADA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('estudiante.oferta.postular', $oferta->id));
+
+        $response->assertStatus(403);
+        $this->assertDatabaseMissing('postulacion', [
+            'oferta_id' => $oferta->id,
+            'estudiante_id' => $estudiante->id,
+        ]);
+    }
+
+    /** @test */
+    public function no_puede_postularse_dos_veces_a_la_misma_oferta()
+    {
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $user = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $user->id ]);
+
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $userEmpresaHabilitada = Usuario::factory()->habilitado()->create(['tipo_id' => $tipoEmpresa->id ]);
+        $empresaHabilitada = Empresa::factory()->create(['usuario_id' => $userEmpresaHabilitada->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresaHabilitada->id,
+            'estado' => Oferta::ESTADO_ACTIVA,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->patch(route('estudiante.oferta.postular', $oferta->id));
+
+        $response2 = $this->actingAs($user)
+            ->patch(route('estudiante.oferta.postular', $oferta->id));
+
+        $response2->assertStatus(403);
     }
 }

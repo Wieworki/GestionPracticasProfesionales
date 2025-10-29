@@ -63,4 +63,19 @@ class OfertaController extends Controller
             'nombre' => $usuario->nombre
         ]);
     }
+
+    public function postular(Request $request, int $id)
+    {
+        $usuario = $request->user();
+        $estudianteId = $usuario->estudiante->id;
+
+        $oferta = $this->ofertaService->getVisibleOfertaForEstudiante($id);
+        if (!$this->ofertaService->canEstudiantePostularse($oferta, $estudianteId)) {
+            abort(403, 'No puede postularse a esta oferta.');
+        }
+        $this->ofertaService->nuevaPostulacion($oferta, $estudianteId);
+
+        return redirect()->route('estudiante.oferta.show', $oferta->id)
+            ->with('success', 'Postulacion exitosa.');
+    }
 }
