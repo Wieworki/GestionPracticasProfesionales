@@ -8,17 +8,24 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\OfertaService;
 use App\Repositories\OfertaRepository;
+use App\Repositories\PostulacionRepository;
 use Illuminate\Support\Facades\Log;
 
 class OfertaController extends Controller
 {
     protected OfertaService $ofertaService;
     protected OfertaRepository $ofertaRepository;
+    protected PostulacionRepository $postulacionRepository;
 
-    public function __construct(OfertaService $ofertaService, OfertaRepository $ofertaRepository)
+    public function __construct(
+        OfertaService $ofertaService,
+        OfertaRepository $ofertaRepository,
+        PostulacionRepository $postulacionRepository
+    )
     {
         $this->ofertaService = $ofertaService;
         $this->ofertaRepository = $ofertaRepository;
+        $this->postulacionRepository = $postulacionRepository;
     }
 
     public function index(Request $request)
@@ -55,7 +62,7 @@ class OfertaController extends Controller
 
         $oferta = $this->ofertaService->getVisibleOfertaForEstudiante($id);
         $canPostularse = $this->ofertaService->canEstudiantePostularse($oferta, $estudianteId);
-        $postulacion = $this->ofertaRepository->getPostulacion($id, $estudianteId);
+        $postulacion = $this->postulacionRepository->getPostulacion($id, $estudianteId);
         $fechaPostulacion = null;
         if ($postulacion) {
             $fechaPostulacion = $postulacion->fecha_creacion;

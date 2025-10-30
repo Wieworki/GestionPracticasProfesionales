@@ -14,6 +14,7 @@ class Postulacion extends Model
     public const ESTADO_SELECCIONADA = 'Seleccionada';
     public const ESTADO_CONFIRMADA = 'Confirmada';
     public const ESTADO_RECHAZADA = 'Rechazada';
+    public const ESTADO_ANULADA = 'Anulada';
 
     protected $table = 'postulacion';
 

@@ -74,7 +74,7 @@ export default function ShowOferta({ empresa, oferta }: Props) {
                 </Link>
             )}
 
-            <Link href={route('empresa.ofertas.postulantes', oferta.id)}>
+            <Link href={route('empresa.ofertas.postulantes', { ofertaId: oferta.id })}>
               <Button variant="default" className="w-full sm:w-auto">
                 Ver postulantes
               </Button>

@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\AdministrativoDashboardController;
 use App\Http\Controllers\Dashboard\EstudianteDashboardController;
 use App\Http\Controllers\Empresa\PerfilController as EmpresaPerfil;
 use App\Http\Controllers\Empresa\OfertaController as EmpresaOferta;
+use App\Http\Controllers\Empresa\PostulacionController as EmpresaPostulaciones;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteController;
 use App\Http\Controllers\Estudiante\OfertaController as OfertaEstudianteController;
@@ -68,11 +69,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/empresa/ofertas/edit/{id}', [EmpresaOferta::class, 'update'])
             ->name('empresa.ofertas.update');
 
-        Route::get('/empresa/ofertas/postulantes/{id}', [EmpresaOferta::class, 'show'])
-            ->name('empresa.ofertas.postulantes'); // REVISAR
-
         Route::patch('/empresa/ofertas/eliminar/{id}', [EmpresaOferta::class, 'eliminar'])
             ->name('empresa.ofertas.eliminar');
+
+        Route::get('/empresa/ofertas/postulantes', [EmpresaPostulaciones::class, 'index'])
+            ->name('empresa.ofertas.postulantes');
+        Route::get('/empresa/ofertas/postulantes/show', [EmpresaPostulaciones::class, 'index'])
+            ->name('empresa.postulacion.show');
+        
     });
 
     Route::middleware('checkUserType:estudiante')->group(function () {
