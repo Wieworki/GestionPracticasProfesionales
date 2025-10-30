@@ -90,6 +90,7 @@ class OfertaService
             'oferta_id' => $oferta->id,
             'estudiante_id' => $estudianteId,
             'fecha_creacion' => now(),
+            'estado' => Postulacion::ESTADO_ACTIVA
         ]);
     }
 }

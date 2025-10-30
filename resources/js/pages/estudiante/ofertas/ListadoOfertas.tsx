@@ -20,20 +20,26 @@ interface PaginationData {
 
 interface Props {
   nombre: string;
+  nombreEmpresaFiltro: string;
   ofertas: PaginationData;
   filters: { search?: string };
   searchRoute: string;
 }
 
-export default function ListadoOfertas({ nombre, ofertas, filters }: Props) {
+export default function ListadoOfertas({ nombre, nombreEmpresaFiltro, ofertas, filters }: Props) {
 
   return (
     <EstudianteLayout nombre={nombre}>
-      <Head title="Mis ofertas" />
+      <Head title="Listado de ofertas" />
       <div className="max-w-6xl mx-auto bg-white shadow rounded-xl p-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold text-blue-700">
-            Listado de ofertas
+            Listado de ofertas 
+            {nombreEmpresaFiltro && (
+              <span>
+                &nbsp; de {nombreEmpresaFiltro}
+              </span>
+            )}
           </h1>
         </div>
 

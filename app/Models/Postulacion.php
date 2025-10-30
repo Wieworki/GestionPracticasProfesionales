@@ -10,12 +10,18 @@ class Postulacion extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const ESTADO_ACTIVA = 'Activa';
+    public const ESTADO_SELECCIONADA = 'Seleccionada';
+    public const ESTADO_CONFIRMADA = 'Confirmada';
+    public const ESTADO_RECHAZADA = 'Rechazada';
+
     protected $table = 'postulacion';
 
     protected $fillable = [
         'oferta_id',
         'estudiante_id',
         'fecha_creacion',
+        'estado'
     ];
 
     protected $casts = [

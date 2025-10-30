@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('oferta_id')->constrained(table: 'oferta')->onDelete('cascade');
             $table->foreignId('estudiante_id')->constrained(table: 'estudiante')->onDelete('cascade');
+            $table->string('estado');
             $table->date('fecha_creacion');
             $table->timestamps();
             $table->softDeletes();

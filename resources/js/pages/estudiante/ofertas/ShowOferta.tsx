@@ -14,9 +14,10 @@ interface Props {
     estado: string;
     canPostularse: boolean;
   };
+  postulacion: string;
 }
 
-export default function ShowOferta({ nombre, oferta }: Props) {
+export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
   const { patch, processing } = useForm({});
 
   const handlePostulacion = (e: React.FormEvent) => {
@@ -47,6 +48,15 @@ export default function ShowOferta({ nombre, oferta }: Props) {
             <h2 className="text-base font-medium text-gray-800 mb-1">Descripción</h2>
             <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">
               {oferta.descripcion}
+            </p>
+          </section>
+        )}
+
+        {postulacion && (
+          <section className="mt-6">
+            <h2 className="text-base font-medium text-gray-800 mb-1">Postulacion hecha</h2>
+            <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">
+              Usted se postuló a la oferta en la fecha {postulacion}
             </p>
           </section>
         )}

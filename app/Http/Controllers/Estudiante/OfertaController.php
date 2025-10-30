@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Estudiante;
 
 use App\Http\Controllers\Controller;
-use App\Models\Oferta;
+use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\OfertaService;
@@ -33,12 +33,18 @@ class OfertaController extends Controller
             empresaId: $empresaId
         );
 
+        $nombreEmpresaFiltro = null;
+        if ($empresaId) {
+            $nombreEmpresaFiltro = Empresa::where('empresa.id', $empresaId)->first()->nombre;
+        }
+
         return Inertia::render('estudiante/ofertas/ListadoOfertas', [
             'ofertas' => $ofertas,
             'filters' => [
                 'search' => $search,
             ],
             'nombre' => $usuario->nombre,
+            'nombreEmpresaFiltro' => $nombreEmpresaFiltro
         ]);
     }
 
@@ -49,6 +55,11 @@ class OfertaController extends Controller
 
         $oferta = $this->ofertaService->getVisibleOfertaForEstudiante($id);
         $canPostularse = $this->ofertaService->canEstudiantePostularse($oferta, $estudianteId);
+        $postulacion = $this->ofertaRepository->getPostulacion($id, $estudianteId);
+        $fechaPostulacion = null;
+        if ($postulacion) {
+            $fechaPostulacion = $postulacion->fecha_creacion;
+        }
 
         return Inertia::render('estudiante/ofertas/ShowOferta', [
             'oferta' => [
@@ -60,6 +71,7 @@ class OfertaController extends Controller
                 'estado' => $oferta->estado,
                 'canPostularse' => $canPostularse
             ],
+            'postulacion' => $fechaPostulacion,
             'nombre' => $usuario->nombre
         ]);
     }

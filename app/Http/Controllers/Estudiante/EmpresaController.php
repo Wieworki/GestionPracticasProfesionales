@@ -7,6 +7,7 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Repositories\EmpresaRepository;
+use Illuminate\Support\Facades\Log;
 
 class EmpresaController extends Controller
 {
@@ -29,8 +30,7 @@ class EmpresaController extends Controller
             return redirect()->route('estudiante.dashboard')
                 ->with('error', 'No es posible acceder a esta empresa.');
         }
-
-        return Inertia::render('estudiante/ShowEmpresa', [
+        return Inertia::render('estudiante/empresa/ShowEmpresa', [
             'empresa' => [
                 'id' => $empresa->id,
                 'nombre' => $empresa->nombre,

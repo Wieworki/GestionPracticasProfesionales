@@ -32,7 +32,7 @@ class EmpresaController extends Controller
         $empresas = $this->empresaRepository->getHabilitadas($search);
         $usuario = Auth::user();
 
-        return Inertia::render('estudiante/VerEmpresas', [
+        return Inertia::render('estudiante/empresa/VerEmpresas', [
             'estudiante' => [
                 'nombre' => $usuario->nombre,
                 'habilitado' => $usuario->habilitado,

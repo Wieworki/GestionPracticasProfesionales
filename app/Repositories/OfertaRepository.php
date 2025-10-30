@@ -125,6 +125,6 @@ class OfertaRepository
         ->where('oferta_id', $idOferta)
         ->where('estudiante_id', $estudianteId);
         
-        return $query->get();
+        return $query->get()->first();
     }
 }
