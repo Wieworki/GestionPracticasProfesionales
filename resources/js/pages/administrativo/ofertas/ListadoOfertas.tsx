@@ -23,9 +23,10 @@ interface Props {
   ofertas: PaginationData;
   filters: { search?: string };
   searchRoute: string;
+  nombreEmpresaFiltro: string;
 }
 
-export default function ListadoOfertas({ nombre, ofertas, filters }: Props) {
+export default function ListadoOfertas({ nombre, nombreEmpresaFiltro, ofertas, filters }: Props) {
 
   return (
     <AdministrativoLayout nombre={nombre}>
@@ -34,6 +35,11 @@ export default function ListadoOfertas({ nombre, ofertas, filters }: Props) {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold text-blue-700">
             Listado de ofertas
+            {nombreEmpresaFiltro && (
+              <span>
+                &nbsp; de {nombreEmpresaFiltro}
+              </span>
+            )}
           </h1>
         </div>
 

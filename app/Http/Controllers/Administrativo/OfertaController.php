@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use App\Models\Oferta;
+use App\Models\Empresa;
 
 class OfertaController extends Controller
 {
@@ -34,12 +35,18 @@ class OfertaController extends Controller
             empresaId: $empresaId
         );
 
+        $nombreEmpresaFiltro = null;
+        if ($empresaId) {
+            $nombreEmpresaFiltro = Empresa::where('empresa.id', $empresaId)->first()->nombre;
+        }
+
         return Inertia::render('administrativo/ofertas/ListadoOfertas', [
             'ofertas' => $ofertas,
             'filters' => [
                 'search' => $search,
             ],
             'nombre' => $usuario->nombre,
+            'nombreEmpresaFiltro' => $nombreEmpresaFiltro
         ]);
     }
 

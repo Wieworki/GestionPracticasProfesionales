@@ -76,7 +76,7 @@ class EmpresaListTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(fn (Assert $page) =>
             $page
-                ->component('administrativo/VerEmpresas')
+                ->component('administrativo/empresa/VerEmpresas')
                 ->has('empresas.data', 2)
         );
     }

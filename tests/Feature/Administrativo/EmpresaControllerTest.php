@@ -112,7 +112,7 @@ class EmpresaControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertInertia(fn ($page) => $page
-                     ->component('administrativo/ShowEmpresa')
+                     ->component('administrativo/empresa/ShowEmpresa')
                      ->where('empresa.id', $empresa->id)
                  );
     }
@@ -140,7 +140,7 @@ class EmpresaControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertInertia(fn ($page) => $page
-                     ->component('administrativo/ShowEmpresa')
+                     ->component('administrativo/empresa/ShowEmpresa')
                      ->where('empresa.id', $empresa->id)
                  );
     }

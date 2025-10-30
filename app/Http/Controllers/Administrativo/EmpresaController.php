@@ -35,7 +35,7 @@ class EmpresaController extends Controller
                 ->with('error', 'No es posible acceder a esta empresa.');
         }
 
-        return Inertia::render('administrativo/ShowEmpresa', [
+        return Inertia::render('administrativo/empresa/ShowEmpresa', [
             'empresa' => [
                 'id' => $empresa->id,
                 'nombre' => $empresa->nombre,
@@ -59,7 +59,7 @@ class EmpresaController extends Controller
         $empresas = $this->empresaRepository->getAll($search);
         $usuario = $request->user();
 
-        return Inertia::render('administrativo/VerEmpresas', [
+        return Inertia::render('administrativo/empresa/VerEmpresas', [
             'administrativo' => [
                 'nombre' => $usuario->nombre,
                 'habilitado' => $usuario->habilitado,
@@ -89,7 +89,7 @@ class EmpresaController extends Controller
     {
         $usuario = $request->user();
         $administrativo = $usuario->administrativo;
-        return Inertia::render('administrativo/CrearEmpresa', [
+        return Inertia::render('administrativo/empresa/CrearEmpresa', [
             'administrativo' => [
                 'nombre' => $administrativo->nombre,
             ],
