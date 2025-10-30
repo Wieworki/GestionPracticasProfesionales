@@ -25,15 +25,15 @@ export default function ShowPostulacion({ nombre, postulacion }: Props) {
         {/* Título */}
         <header className="mb-6 border-b pb-3">
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
-            Detalle de la postulacion
+            Detalle de la postulacion a {postulacion.titulo}
           </h1>
         </header>
 
         {/* Información principal */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-gray-700">
-          <Detail label="Oferta" value={postulacion.titulo} />
-          <Detail label="Estado de la postulacion" value={postulacion.estado} />
           <Detail label="Estudiante" value={postulacion.estudiante} />
+          <Detail label="Contacto" value={postulacion.email_contacto} />
+          <Detail label="Estado de la postulacion" value={postulacion.estado} />
           <Detail label="Fecha de la postulacion" value={postulacion.fecha_creacion} />
         </section>
 

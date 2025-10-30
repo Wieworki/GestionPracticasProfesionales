@@ -75,6 +75,7 @@ class PostulacionController extends Controller
                 'titulo' => $postulacion->oferta->titulo,
                 'estado' => $postulacion->estado,
                 'estudiante' => $postulacion->estudiante->nombre,
+                'email_contacto' => $postulacion->estudiante->email,
                 'fecha_creacion' => $postulacion->fecha_creacion->format('d/m/Y'),
                 'facultad_estudiante' => $facultad,
                 'canBeSelected' => $canBeSelected

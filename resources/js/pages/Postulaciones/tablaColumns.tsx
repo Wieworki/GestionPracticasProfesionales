@@ -7,6 +7,7 @@ export interface Postulacion {
   empresa: string;
   titulo: string;
   estudiante: string;
+  email_contacto: string;
   facultad_estudiante: string;
   fecha_creacion: string;
   estado: string;
