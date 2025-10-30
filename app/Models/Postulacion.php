@@ -44,4 +44,9 @@ class Postulacion extends Model
     {
         return $this->belongsTo(Estudiante::class, 'estudiante_id', 'id');
     }
+
+    public function canBeSelected()
+    {
+        return $this->estado == Postulacion::ESTADO_ACTIVA;
+    }
 }

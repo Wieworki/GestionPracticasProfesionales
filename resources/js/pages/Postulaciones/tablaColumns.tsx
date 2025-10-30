@@ -7,8 +7,10 @@ export interface Postulacion {
   empresa: string;
   titulo: string;
   estudiante: string;
+  facultad_estudiante: string;
   fecha_creacion: string;
   estado: string;
+  canBeSelected: string;
 }
 
 export const columnasBase: ColumnDef<Postulacion>[] = [
@@ -64,7 +66,7 @@ export const columnasEmpresa: ColumnDef<Postulacion>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2">
         <Link
-          href={route('empresa.postulacion.show', row.original.id)}
+          href={route('empresa.postulacion.show', { postulacionId: row.original.id })}
           className="text-blue-600 hover:underline"
         >
           Ver
