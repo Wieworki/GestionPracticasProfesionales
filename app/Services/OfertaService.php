@@ -84,13 +84,4 @@ class OfertaService
             && $oferta->isActiva();
     }
 
-    public function nuevaPostulacion(Oferta $oferta, int $estudianteId)
-    {
-        return Postulacion::create([
-            'oferta_id' => $oferta->id,
-            'estudiante_id' => $estudianteId,
-            'fecha_creacion' => now(),
-            'estado' => Postulacion::ESTADO_ACTIVA
-        ]);
-    }
 }

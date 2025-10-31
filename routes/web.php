@@ -76,8 +76,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('empresa.ofertas.postulantes');
         Route::get('/empresa/ofertas/postulantes/show', [EmpresaPostulaciones::class, 'show'])
             ->name('empresa.postulacion.show');
-        Route::patch('/empresa/ofertas/postulantes/show', [EmpresaPostulaciones::class, 'show'])
-            ->name('empresa.postulacion.seleccionar');
+        Route::patch('/empresa/ofertas/postulantes/seleccionar', [EmpresaPostulaciones::class, 'seleccionarPostulante'])
+            ->name('empresa.postulacion.seleccionarPostulante');
         
     });
 

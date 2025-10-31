@@ -189,4 +189,94 @@ class PostulacionesControllerTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    // Tests para seleccion de una postulacion
+
+     /** @test */
+    public function una_empresa_puede_seleccionar_una_postulacion_de_su_oferta()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuarioEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuarioEmpresa->id]);
+
+        // Crear estudiante + usuario asociado
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $usuarioEstudiante = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $usuarioEstudiante->id]);
+
+        // Crear oferta
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA
+        ]);
+
+        // Crear postulacion activa
+        $postulacion = Postulacion::factory()->create([
+            'oferta_id' => $oferta->id,
+            'estudiante_id' => $estudiante->id,
+            'estado' => Postulacion::ESTADO_ACTIVA,
+        ]);
+
+        $response = $this
+            ->actingAs($usuarioEmpresa)
+            ->patch(route('empresa.postulacion.seleccionarPostulante'), [
+                'postulacionId' => $postulacion->id,
+            ]);
+
+        $response->assertRedirect(route('empresa.ofertas.postulantes', [
+            'ofertaId' => $oferta->id,
+        ]));
+
+        $response->assertSessionHas('success', 'Postulacion seleccionada correctamente.');
+
+        // Verificar que el estado cambió
+        $this->assertDatabaseHas('postulacion', [
+            'id' => $postulacion->id,
+            'estado' => Postulacion::ESTADO_SELECCIONADA,
+        ]);
+    }
+
+    /** @test */
+    public function seleccion_postulacion_retorna_403_si_la_postulacion_no_existe()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuarioEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuarioEmpresa->id]);
+
+        $response = $this
+            ->actingAs($usuarioEmpresa)
+            ->patch(route('empresa.postulacion.seleccionarPostulante'), [
+                'postulacionId' => 999,
+            ]);
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function seleccion_postulacion_retorna_403_si_la_postulacion_pertenece_a_otra_empresa()
+    {
+        $tipoEmpresa = TipoUsuario::factory()->isEmpresa()->create();
+        $usuarioEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $usuarioEmpresa->id]);
+
+        // Otra empresa y oferta
+        $otroUsuarioEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEmpresa->id]);
+        $otraEmpresa = Empresa::factory()->create(['usuario_id' => $otroUsuarioEmpresa->id]);
+
+        $ofertaAjena = Oferta::factory()->create([
+            'empresa_id' => $otraEmpresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA
+        ]);
+        // Postulación de la otra empresa
+        $postulacion = Postulacion::factory()->create(['oferta_id' => $ofertaAjena->id]);
+
+        // Intento de selección
+        $response = $this
+            ->actingAs($usuarioEmpresa)
+            ->patch(route('empresa.postulacion.seleccionarPostulante'), [
+                'postulacionId' => $postulacion->id,
+            ]);
+
+        $response->assertStatus(403);
+    }
 }

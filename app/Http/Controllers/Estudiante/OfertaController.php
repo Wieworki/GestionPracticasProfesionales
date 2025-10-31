@@ -7,6 +7,7 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\OfertaService;
+use App\Services\PostulacionService;
 use App\Repositories\OfertaRepository;
 use App\Repositories\PostulacionRepository;
 use Illuminate\Support\Facades\Log;
@@ -16,16 +17,19 @@ class OfertaController extends Controller
     protected OfertaService $ofertaService;
     protected OfertaRepository $ofertaRepository;
     protected PostulacionRepository $postulacionRepository;
+    protected PostulacionService $postulacionService;
 
     public function __construct(
         OfertaService $ofertaService,
         OfertaRepository $ofertaRepository,
-        PostulacionRepository $postulacionRepository
+        PostulacionRepository $postulacionRepository,
+        PostulacionService $postulacionService
     )
     {
         $this->ofertaService = $ofertaService;
         $this->ofertaRepository = $ofertaRepository;
         $this->postulacionRepository = $postulacionRepository;
+        $this->postulacionService = $postulacionService;
     }
 
     public function index(Request $request)
@@ -92,7 +96,7 @@ class OfertaController extends Controller
         if (!$this->ofertaService->canEstudiantePostularse($oferta, $estudianteId)) {
             abort(403, 'No puede postularse a esta oferta.');
         }
-        $this->ofertaService->nuevaPostulacion($oferta, $estudianteId);
+        $this->postulacionService->nuevaPostulacion($oferta, $estudianteId);
 
         return redirect()->route('estudiante.oferta.show', $oferta->id)
             ->with('success', 'Postulacion exitosa.');

@@ -15,7 +15,7 @@ export default function ShowPostulacion({ nombre, postulacion }: Props) {
   const handleSelection = (e: React.FormEvent) => {
     e.preventDefault();
     if (confirm('¿Estás seguro de que desea seleccionar este postulante?')) {
-      patch(route('empresa.postulacion.seleccionar', postulacion.id));
+      patch(route('empresa.postulacion.seleccionarPostulante', { postulacionId: postulacion.id }));
     }
   };
 

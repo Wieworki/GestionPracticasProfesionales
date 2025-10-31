@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Empresa;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\PostulacionRepository;
+use App\Services\PostulacionService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Oferta;
@@ -14,10 +15,14 @@ class PostulacionController extends Controller
 {
 
     protected PostulacionRepository $postulacionRepository;
+    protected PostulacionService $postulacionService;
 
-    public function __construct(PostulacionRepository $postulacionRepository)
-    {
+    public function __construct(
+        PostulacionRepository $postulacionRepository,
+        PostulacionService $postulacionService
+    ) {
         $this->postulacionRepository = $postulacionRepository;
+        $this->postulacionService = $postulacionService;
     }
 
     public function index(Request $request)
@@ -84,4 +89,26 @@ class PostulacionController extends Controller
         ]);
     }
 
+
+    public function seleccionarPostulante(Request $request)
+    {
+        $empresa = $request->user()->empresa;
+        $postulacionId = $request->input('postulacionId');
+        $postulacion = Postulacion::where('postulacion.id', $postulacionId)->first();
+
+        if (!$postulacion) {
+            abort(403, 'La postulacion no existe.');
+        }
+
+        $empresaOferta = $postulacion->oferta->empresa;
+
+        if ($empresaOferta->id != $empresa->id) {
+            abort(403, 'No puede elegir un postulante para esta oferta.');
+        }
+
+        $this->postulacionService->seleccionarPostulacion($postulacionId);
+
+        return redirect()->route('empresa.ofertas.postulantes', ['ofertaId' => $postulacion->oferta->id])
+            ->with('success', 'Postulacion seleccionada correctamente.');
+    }
 }
