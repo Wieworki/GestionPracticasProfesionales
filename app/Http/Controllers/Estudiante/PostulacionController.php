@@ -45,4 +45,29 @@ class PostulacionController extends Controller
             ],
         ]);
     }
+
+    public function confirmar(Request $request)
+    {
+        $usuario = $request->user();
+        $postulacionId = $request->input('postulacionId');
+
+        $postulacion = Postulacion::where('postulacion.id', $postulacionId)->first();
+        if (!$postulacion) {
+            abort(403, 'La postulacion no existe.');
+        }
+
+        $estudiantePostulacion = $postulacion->estudiante;
+        if ($estudiantePostulacion->id != $usuario->estudiante->id) {
+            abort(403, 'No puede confirmar esta postulacion.');
+        }
+
+        if (!$postulacion->isSeleccionada()) {
+            abort(403, 'No puede confirmar esta postulacion.');
+        }
+
+        $this->postulacionService->confirmarPostulacion($postulacionId);
+
+        return redirect()->route('estudiante.oferta.show', $postulacion->oferta->id)
+            ->with('success', 'Postulacion exitosa.');
+    }
 }

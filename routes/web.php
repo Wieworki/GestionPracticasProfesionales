@@ -102,6 +102,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/estudiante/postulaciones/index', [PostulacionEstudianteController::class, 'index'])
             ->name('estudiante.postulaciones.index');
+        Route::patch('/estudiante/postulacion/confirmar', [PostulacionEstudianteController::class, 'confirmar'])
+            ->name('estudiante.postulacion.confirmar');
     });
 
     Route::middleware('checkUserType:administrativo')->group(function () {

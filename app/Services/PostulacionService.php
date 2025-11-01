@@ -30,4 +30,11 @@ class PostulacionService
         $postulacion->update(['estado' => Postulacion::ESTADO_SELECCIONADA]);
         return $postulacion;
     }
+
+    public function confirmarPostulacion(int $postulacionId)
+    {
+        $postulacion = Postulacion::where('postulacion.id', $postulacionId)->first();
+        $postulacion->update(['estado' => Postulacion::ESTADO_CONFIRMADA]);
+        return $postulacion;
+    }
 }

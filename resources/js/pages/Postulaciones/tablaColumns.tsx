@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 
 export interface Postulacion {
   id: number;
-  id_oferta: number;
+  oferta_id: number;
   empresa: string;
   titulo: string;
   estudiante: string;
@@ -97,7 +97,7 @@ export const columnasEstudiante: ColumnDef<Postulacion>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2">
         <Link
-          href={route('estudiante.oferta.show', row.original.id)}
+          href={route('estudiante.oferta.show', row.original.oferta_id)}
           className="text-blue-600 hover:underline"
         >
           Ver

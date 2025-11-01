@@ -40,11 +40,10 @@ class PostulacionRepository
 
     public function getPostulacion($ofertaId, $estudianteId)
     {
-        $query = DB::table('postulacion')
-        ->where('oferta_id', $ofertaId)
-        ->where('estudiante_id', $estudianteId);
-        
-        return $query->get()->first();
+        return Postulacion::where(function ($query) use ($ofertaId, $estudianteId) {
+            $query->where('oferta_id', $ofertaId)
+                    ->Where('estudiante_id', $estudianteId);
+        })->first();
     }
 
     public function getPostulacionesEstudiante(?string $search = null, int $perPage = 10, ?int $estudianteId = null): LengthAwarePaginator

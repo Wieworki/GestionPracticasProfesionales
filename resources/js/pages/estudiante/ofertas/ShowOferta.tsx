@@ -14,7 +14,13 @@ interface Props {
     estado: string;
     canPostularse: boolean;
   };
-  postulacion: string;
+  postulacion: {
+    id: number;
+    existe: boolean;
+    fecha: string;
+    seleccionada: boolean;
+    confirmada: boolean;
+  };
 }
 
 export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
@@ -24,6 +30,13 @@ export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
     e.preventDefault();
     if (confirm('¿Estás seguro de que desea postularse esta oferta?')) {
       patch(route('estudiante.oferta.postular', oferta.id));
+    }
+  };
+  
+  const handleConfirmacion = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (confirm('¿Estás seguro de que deseas confirmar?')) {
+      patch(route('estudiante.postulacion.confirmar', { postulacionId: postulacion.id }));
     }
   };
 
@@ -52,12 +65,36 @@ export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
           </section>
         )}
 
-        {postulacion && (
+        {postulacion.existe && (
           <section className="mt-6">
             <h2 className="text-base font-medium text-gray-800 mb-1">Postulacion hecha</h2>
             <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">
-              Usted se postuló a la oferta en la fecha {postulacion}
+              Usted se postuló a la oferta en la fecha {postulacion.fecha}
             </p>
+
+            {postulacion.seleccionada && (
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h3 className="text-base font-semibold text-blue-700 mb-2">
+                  ¡Fuiste seleccionado!
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  ¡Felicitaciones! Has sido seleccionado por la empresa para realizar la práctica profesional correspondiente a esta oferta.
+                  <br />
+                  Si deseas confirmar tu participación, presioná el botón de <strong>“Confirmar postulación”</strong>. 
+                </p>
+              </div>
+            )}
+
+            {postulacion.confirmada && (
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h3 className="text-base font-semibold text-blue-700 mb-2">
+                  Postulacion confirmada
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  Confirmaste que vas a realizar la práctica profesional. Se te contactará para más detalles.
+                </p>
+              </div>
+            )}
           </section>
         )}
 
@@ -69,6 +106,18 @@ export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
           </Link>
 
             <div className="flex gap-3 w-full sm:w-auto justify-end">
+            {postulacion.seleccionada && (
+              <form onSubmit={handleConfirmacion}>
+                <Button
+                  type="submit"
+                  disabled={processing}
+                  className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+                >
+                  Confirmar postulacion
+                </Button>
+              </form>
+            )}
+
             {oferta.canPostularse && (
               <form onSubmit={handlePostulacion}>
                 <Button

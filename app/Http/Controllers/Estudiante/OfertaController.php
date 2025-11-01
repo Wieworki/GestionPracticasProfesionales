@@ -66,11 +66,8 @@ class OfertaController extends Controller
 
         $oferta = $this->ofertaService->getVisibleOfertaForEstudiante($id);
         $canPostularse = $this->ofertaService->canEstudiantePostularse($oferta, $estudianteId);
+        /** @var Postulacion $postulacion */
         $postulacion = $this->postulacionRepository->getPostulacion($id, $estudianteId);
-        $fechaPostulacion = null;
-        if ($postulacion) {
-            $fechaPostulacion = $postulacion->fecha_creacion;
-        }
 
         return Inertia::render('estudiante/ofertas/ShowOferta', [
             'oferta' => [
@@ -82,7 +79,13 @@ class OfertaController extends Controller
                 'estado' => $oferta->estado,
                 'canPostularse' => $canPostularse
             ],
-            'postulacion' => $fechaPostulacion,
+            'postulacion' => [
+                'id' => $postulacion?->id,
+                'existe' => $postulacion ? true : false,
+                'fecha' => $postulacion?->fecha_creacion->format('d/m/Y'),
+                'seleccionada' => $postulacion?->isSeleccionada(),
+                'confirmada' => $postulacion?->isConfirmada(),
+            ],
             'nombre' => $usuario->nombre
         ]);
     }

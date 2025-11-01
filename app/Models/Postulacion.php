@@ -49,4 +49,14 @@ class Postulacion extends Model
     {
         return $this->estado == Postulacion::ESTADO_ACTIVA;
     }
+
+    public function isSeleccionada()
+    {
+        return $this->estado == Postulacion::ESTADO_SELECCIONADA;
+    }
+
+    public function isConfirmada()
+    {
+        return $this->estado == Postulacion::ESTADO_CONFIRMADA;
+    }
 }
