@@ -16,7 +16,7 @@ export default function EstudianteLayout({ children, nombre }: Props) {
         { label: 'Mis Datos', href: '/estudiante/perfil', isEnabled: true },      // La opcion de "mis datos" esta disponible aun si el usuario no esta habilitado
         { label: 'Ver ofertas disponibles', href: '/estudiante/ofertas/index', isEnabled: auth.user.habilitado },
         { label: 'Ver Empresas', href: '/estudiante/empresas', isEnabled: auth.user.habilitado },
-        { label: 'Mis Postulaciones', href: '/estudiante/postulaciones', isEnabled: auth.user.habilitado },
+        { label: 'Mis Postulaciones', href: '/estudiante/postulaciones/index', isEnabled: auth.user.habilitado },
     ];
 
     return (

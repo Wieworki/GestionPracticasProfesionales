@@ -16,10 +16,6 @@ export interface Postulacion {
 
 export const columnasBase: ColumnDef<Postulacion>[] = [
   {
-    accessorKey: 'estudiante',
-    header: 'Estudiante',
-  },
-  {
     accessorKey: 'estado',
     header: 'Estado de la postulacion',
   },
@@ -35,6 +31,10 @@ export const columnasBase: ColumnDef<Postulacion>[] = [
 
 export const columnasAdministrativo: ColumnDef<Postulacion>[] = [
   ...columnasBase,
+  {
+    accessorKey: 'estudiante',
+    header: 'Estudiante',
+  },
   {
     accessorKey: 'empresa',
     header: 'Empresa',
@@ -62,6 +62,10 @@ export const columnasAdministrativo: ColumnDef<Postulacion>[] = [
 export const columnasEmpresa: ColumnDef<Postulacion>[] = [
   ...columnasBase,
   {
+    accessorKey: 'estudiante',
+    header: 'Estudiante',
+  },
+  {
     id: 'acciones',
     header: 'Acciones',
     cell: ({ row }) => (
@@ -78,7 +82,6 @@ export const columnasEmpresa: ColumnDef<Postulacion>[] = [
 ];
 
 export const columnasEstudiante: ColumnDef<Postulacion>[] = [
-  ...columnasBase,
   {
     accessorKey: 'empresa',
     header: 'Empresa',
@@ -87,13 +90,14 @@ export const columnasEstudiante: ColumnDef<Postulacion>[] = [
     accessorKey: 'titulo',
     header: 'Titulo oferta',
   },
+  ...columnasBase,
   {
     id: 'acciones',
     header: 'Acciones',
     cell: ({ row }) => (
       <div className="flex gap-2">
         <Link
-          href={route('estudiante.postulacion.show', row.original.id)}
+          href={route('estudiante.oferta.show', row.original.id)}
           className="text-blue-600 hover:underline"
         >
           Ver

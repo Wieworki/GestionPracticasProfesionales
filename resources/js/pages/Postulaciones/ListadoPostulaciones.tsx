@@ -27,7 +27,7 @@ interface Props {
   postulaciones: PaginationData;
     filters: { search?: string };
   columns: ColumnDef<Postulacion>[];
-  ofertaId: number;
+  ofertaId: number|null;
   searchRoute: string;
   goBackRoute: string;
 }

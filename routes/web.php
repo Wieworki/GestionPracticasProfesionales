@@ -16,6 +16,7 @@ use App\Http\Controllers\Empresa\PostulacionController as EmpresaPostulaciones;
 use App\Http\Controllers\Estudiante\PerfilController as EstudiantePerfil;
 use App\Http\Controllers\Estudiante\EmpresaController as EmpresaEstudianteController;
 use App\Http\Controllers\Estudiante\OfertaController as OfertaEstudianteController;
+use App\Http\Controllers\Estudiante\PostulacionController as PostulacionEstudianteController;
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
 use App\Http\Controllers\Administrativo\EmpresaController as EmpresaAdministrativoController;
 use App\Http\Controllers\Administrativo\EstudianteController as EstudianteAdministrativoController;
@@ -98,6 +99,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('estudiante.oferta.show');
         Route::patch('/estudiante/ofertas/confirmar/{id}', [OfertaEstudianteController::class, 'postular'])
             ->name('estudiante.oferta.postular');
+
+        Route::get('/estudiante/postulaciones/index', [PostulacionEstudianteController::class, 'index'])
+            ->name('estudiante.postulaciones.index');
     });
 
     Route::middleware('checkUserType:administrativo')->group(function () {

@@ -26,7 +26,7 @@ export default function Dashboard({ estudiante, mensajeBienvenida }: Props) {
         {
             title: 'Postulaciones hechas',
             description: 'Gestion de las postulaciones hechas.',
-            href: '/estudiante/postulaciones',
+            href: '/estudiante/postulaciones/index',
             icon: <Building2 className="text-blue-600 w-6 h-6" />,
         },
     ];
