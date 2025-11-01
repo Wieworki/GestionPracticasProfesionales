@@ -70,4 +70,30 @@ class PostulacionController extends Controller
         return redirect()->route('estudiante.oferta.show', $postulacion->oferta->id)
             ->with('success', 'Postulacion exitosa.');
     }
+
+    public function anular(Request $request)
+    {
+        $usuario = $request->user();
+        $postulacionId = $request->input('postulacionId');
+
+        /** @var Postulacion $postulacion */
+        $postulacion = Postulacion::where('postulacion.id', $postulacionId)->first();
+        if (!$postulacion) {
+            abort(403, 'La postulacion no existe.');
+        }
+
+        $estudiantePostulacion = $postulacion->estudiante;
+        if ($estudiantePostulacion->id != $usuario->estudiante->id) {
+            abort(403, 'No puede anular esta postulacion.');
+        }
+
+        if (!$postulacion->canBeAnulada()) {
+            abort(403, 'No puede anular esta postulacion.');
+        }
+
+        $this->postulacionService->anularPostulacion($postulacionId);
+
+        return redirect()->route('estudiante.oferta.show', $postulacion->oferta->id)
+            ->with('success', 'Postulacion anulada correctamente.');
+    }
 }

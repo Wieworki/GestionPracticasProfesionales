@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useForm } from '@inertiajs/react';
 import EstudianteLayout from '@/layouts/dashboard/EstudianteLayout';
 import { Button } from '@/components/ui/button';
+import BotonVolver from '@/components/basicos/botonVolver';
 
 interface Props {
   nombre: string;
@@ -20,6 +21,8 @@ interface Props {
     fecha: string;
     seleccionada: boolean;
     confirmada: boolean;
+    canAnular: boolean;
+    mensajePostulacion: string;
   };
 }
 
@@ -37,6 +40,13 @@ export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
     e.preventDefault();
     if (confirm('¿Estás seguro de que deseas confirmar?')) {
       patch(route('estudiante.postulacion.confirmar', { postulacionId: postulacion.id }));
+    }
+  };
+
+  const handleAnulacion = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (confirm('¿Estás seguro de que desea anular la postulacion?')) {
+      patch(route('estudiante.postulacion.anular', { postulacionId: postulacion.id }));
     }
   };
 
@@ -69,7 +79,7 @@ export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
           <section className="mt-6">
             <h2 className="text-base font-medium text-gray-800 mb-1">Postulacion hecha</h2>
             <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">
-              Usted se postuló a la oferta en la fecha {postulacion.fecha}
+              {postulacion.mensajePostulacion}
             </p>
 
             {postulacion.seleccionada && (
@@ -99,13 +109,25 @@ export default function ShowOferta({ nombre, oferta, postulacion }: Props) {
         )}
 
         <footer className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-10">
-          <Link href={route('estudiante.ofertas.index')}>
-            <Button variant="secondary" className="w-full sm:w-auto">
+
+            <BotonVolver ruta='estudiante.ofertas.index'>
               Volver
-            </Button>
-          </Link>
+            </BotonVolver>
 
             <div className="flex gap-3 w-full sm:w-auto justify-end">
+
+            {postulacion.canAnular && (
+              <form onSubmit={handleAnulacion}>
+                <Button
+                  type="submit"
+                  disabled={processing}
+                  className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
+                >
+                  Anular postulacion
+                </Button>
+              </form>
+            )}
+
             {postulacion.seleccionada && (
               <form onSubmit={handleConfirmacion}>
                 <Button

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Estudiante;
 
+use App\Helper\PostulacionHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa;
+use App\Models\Postulacion;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Services\OfertaService;
@@ -85,6 +87,8 @@ class OfertaController extends Controller
                 'fecha' => $postulacion?->fecha_creacion->format('d/m/Y'),
                 'seleccionada' => $postulacion?->isSeleccionada(),
                 'confirmada' => $postulacion?->isConfirmada(),
+                'canAnular' => $postulacion?->canBeAnulada(),
+                'mensajePostulacion' => PostulacionHelper::getMensajePostulacion($postulacion)
             ],
             'nombre' => $usuario->nombre
         ]);

@@ -47,6 +47,16 @@ class Postulacion extends Model
 
     public function canBeSelected()
     {
+        return $this->isActiva();
+    }
+
+    public function canBeAnulada()
+    {
+        return ($this->isActiva() || $this->isSeleccionada());
+    }
+
+    public function isActiva()
+    {
         return $this->estado == Postulacion::ESTADO_ACTIVA;
     }
 
@@ -58,5 +68,10 @@ class Postulacion extends Model
     public function isConfirmada()
     {
         return $this->estado == Postulacion::ESTADO_CONFIRMADA;
+    }
+
+    public function isAnulada()
+    {
+        return $this->estado == Postulacion::ESTADO_ANULADA;
     }
 }

@@ -97,7 +97,7 @@ export const columnasEstudiante: ColumnDef<Postulacion>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2">
         <Link
-          href={route('estudiante.oferta.show', row.original.oferta_id)}
+          href={route('estudiante.oferta.show', { id: row.original.oferta_id } )}
           className="text-blue-600 hover:underline"
         >
           Ver

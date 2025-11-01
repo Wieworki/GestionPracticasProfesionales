@@ -246,4 +246,101 @@ class PostulacionesControllerTest extends TestCase
         // Assert
         $response->assertForbidden();
     }
+
+    
+    // Anular postulacion
+
+    /** @test */
+    public function estudiante_puede_anular_su_postulacion()
+    {
+        // Arrange
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $usuario = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $usuario->id ]);
+
+        $userEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $userEmpresa->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA, 
+        ]);
+
+        // Creamos la postulacion como "Seleccionada"
+        $postulacion = Postulacion::factory()->create([
+            'oferta_id' => $oferta->id,
+            'estudiante_id' => $estudiante->id,
+            'estado' => Postulacion::ESTADO_SELECCIONADA,
+        ]);
+
+        // Act
+        $response = $this->actingAs($usuario)
+            ->patch(route('estudiante.postulacion.anular'), [
+                'postulacionId' => $postulacion->id,
+            ]);
+
+        // Assert
+        $response->assertRedirect(route('estudiante.oferta.show', $oferta->id));
+
+        $this->assertDatabaseHas('postulacion', [
+            'id' => $postulacion->id,
+            'estado' => Postulacion::ESTADO_ANULADA,
+        ]);
+    }
+
+    /** @test */
+    public function estudiante_no_puede_anular_postulacion_de_otro_estudiante()
+    {
+        // Arrange
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $usuario1 = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante1 = Estudiante::factory()->create(['usuario_id' => $usuario1->id ]);
+        $usuario2 = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante2 = Estudiante::factory()->create(['usuario_id' => $usuario2->id ]);
+
+        $userEmpresa = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $empresa = Empresa::factory()->create(['usuario_id' => $userEmpresa->id ]);
+
+        $oferta = Oferta::factory()->create([
+            'empresa_id' => $empresa->id,
+            'estado' => Oferta::ESTADO_ACTIVA, 
+        ]);
+
+        $postulacion = Postulacion::factory()->create([
+            'oferta_id' => $oferta->id,
+            'estudiante_id' => $estudiante2->id,
+            'estado' => Postulacion::ESTADO_SELECCIONADA,
+        ]);
+
+        // Act
+        $response = $this->actingAs($usuario1)
+            ->patch(route('estudiante.postulacion.anular'), [
+                'postulacionId' => $postulacion->id,
+            ]);
+
+        // Assert
+        $response->assertForbidden();
+        $this->assertDatabaseHas('postulacion', [
+            'id' => $postulacion->id,
+            'estado' => Postulacion::ESTADO_SELECCIONADA,
+        ]);
+    }
+
+    /** @test */
+    public function estudiante_no_puede_anular_una_postulacion_inexistente()
+    {
+        // Arrange
+        $tipoEstudiante = TipoUsuario::factory()->isEstudiante()->create();
+        $usuario = Usuario::factory()->create(['tipo_id' => $tipoEstudiante->id ]);
+        $estudiante = Estudiante::factory()->create(['usuario_id' => $usuario->id ]);
+
+        // Act
+        $response = $this->actingAs($usuario)
+            ->patch(route('estudiante.postulacion.anular'), [
+                'postulacionId' => 999,
+            ]);
+
+        // Assert
+        $response->assertForbidden();
+    }
 }
