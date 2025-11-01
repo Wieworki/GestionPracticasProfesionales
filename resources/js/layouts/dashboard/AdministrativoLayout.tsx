@@ -16,7 +16,7 @@ export default function AdministrativoLayout({ children, nombre }: Props) {
         { label: 'Mis Datos', href: '/administrativo/perfil', isEnabled: true },      // La opcion de "mis datos" esta disponible aun si el usuario no esta habilitado
         { label: 'Empresas', href: '/administrativo/empresas', isEnabled: auth.user.habilitado },
         { label: 'Estudiantes', href: '/administrativo/estudiantes', isEnabled: auth.user.habilitado },
-        { label: 'Ofertas', href: '/administrativo/ofertas', isEnabled: auth.user.habilitado },
+        { label: 'Ofertas', href: '/administrativo/ofertas/index', isEnabled: auth.user.habilitado },
         { label: 'Administracion', href: '/administrativo/administracion', isEnabled: auth.user.habilitado },
     ];
 

@@ -7,7 +7,7 @@ import {
   ColumnDef
 } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { Oferta } from '@/pages/Oferta/tablaColumns';
+import { Postulacion } from '@/pages/Postulaciones/tablaColumns';
 
 interface PaginationLink {
   url: string | null;
@@ -16,7 +16,7 @@ interface PaginationLink {
 }
 
 interface PaginationData {
-  data: Oferta[];
+  data: Postulacion[];
   links: PaginationLink[];
   current_page: number;
   last_page: number;
@@ -24,17 +24,19 @@ interface PaginationData {
 }
 
 interface Props {
-  ofertas: PaginationData;
+  postulaciones: PaginationData;
     filters: { search?: string };
-  columns: ColumnDef<Oferta>[];
+  columns: ColumnDef<Postulacion>[];
+  ofertaId: number|null;
   searchRoute: string;
   goBackRoute: string;
 }
 
-export default function ListadoOfertas({
-  ofertas,
+export default function ListadoPostulaciones({
+  postulaciones,
   filters,
   columns,
+  ofertaId,
   searchRoute,
   goBackRoute,
 }: Props) {
@@ -42,13 +44,13 @@ export default function ListadoOfertas({
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    router.get(searchRoute, { search }, { preserveState: true });
+    router.get(searchRoute, { search: search, ofertaId: ofertaId }, { preserveState: true });
   };
 
-  const table = useReactTable({       // Crea la instancia de tabla de tanstack
-    data: ofertas.data,
+  const table = useReactTable({
+    data: postulaciones.data,
     columns,
-    getCoreRowModel: getCoreRowModel(),   // Devuelve el modelo básico de filas, necesario para poder renderizarlas
+    getCoreRowModel: getCoreRowModel(),
   });
 
   return (
@@ -110,7 +112,7 @@ export default function ListadoOfertas({
       </div>
 
       <div className="mt-6 flex justify-center space-x-1">
-        {ofertas.links?.map((link: any, index: number) => (
+        {postulaciones.links?.map((link: any, index: number) => (
           <button
             key={index}
             disabled={!link.url}

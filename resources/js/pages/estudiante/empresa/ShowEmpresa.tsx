@@ -55,7 +55,7 @@ export default function ShowEmpresa({
                         <Button variant="secondary">Volver</Button>
                     </Link>
 
-                    <Link href={`/estudiante/ofertas?empresa_id=${empresa.id}`}>
+                    <Link href={route('estudiante.ofertas.index', { empresaId: empresa.id })}>
                         <Button variant="default">Ver ofertas</Button>
                     </Link>
                 </div>

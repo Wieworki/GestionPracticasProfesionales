@@ -38,7 +38,7 @@ class ShowEmpresaTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertInertia(fn ($page) => $page
-                     ->component('estudiante/ShowEmpresa')
+                     ->component('estudiante/empresa/ShowEmpresa')
                      ->where('empresa.id', $empresa->id)
                  );
     }

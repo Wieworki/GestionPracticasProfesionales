@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Models\Oferta;
 use App\Models\Carrera;
 use App\Models\Empresa;
+use App\Models\Postulacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OfertaService
 {
@@ -34,7 +36,7 @@ class OfertaService
                 'descripcion' => $data['descripcion'],
                 'fecha_creacion' => now(),
                 'fecha_cierre' => $data['fecha_cierre'],
-                'estado' => 'Pendiente',
+                'estado' => OFERTA::ESTADO_PENDIENTE,
                 'modalidad' => $data['modalidad'],
             ]);
 
@@ -54,4 +56,32 @@ class OfertaService
             return $oferta;
         });
     }
+
+    public function getVisibleOfertaForEstudiante(int $ofertaId): Oferta
+    {
+        $oferta = Oferta::with('empresa')->find($ofertaId);
+
+        if (!$oferta) {
+            throw new ModelNotFoundException("La oferta no existe.");
+        }
+
+        if (!$oferta->isVisibileForEstudiante()) {
+            abort(403, 'No tiene permiso para acceder a esta oferta.');
+        }
+
+        if (!$oferta->empresa->habilitado) {
+            abort(403, 'La empresa no está habilitada.');
+        }
+
+        return $oferta;
+    }
+
+    public function canEstudiantePostularse(Oferta $oferta, int $estudianteId): bool
+    {
+        return !$oferta->postulaciones()
+            ->where('estudiante_id', $estudianteId)
+            ->exists()
+            && $oferta->isActiva();
+    }
+
 }

@@ -95,7 +95,7 @@ export default function ShowEmpresa({ empresa, administrativo }: Props) {
               </form>
             )}
 
-            <Link href={`/administrativo/ofertas?empresa_id=${empresa.id}`}>
+            <Link href={route('administrativo.ofertas.index', { empresaId: empresa.id })}>
               <Button variant="default" className="w-full sm:w-auto">
                 Ver ofertas
               </Button>

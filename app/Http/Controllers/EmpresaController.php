@@ -32,7 +32,7 @@ class EmpresaController extends Controller
         $empresas = $this->empresaRepository->getHabilitadas($search);
         $usuario = Auth::user();
 
-        return Inertia::render('estudiante/VerEmpresas', [
+        return Inertia::render('estudiante/empresa/VerEmpresas', [
             'estudiante' => [
                 'nombre' => $usuario->nombre,
                 'habilitado' => $usuario->habilitado,
@@ -40,23 +40,6 @@ class EmpresaController extends Controller
             'empresas' => $empresas,
             'filters' => request()->only('search'),
             'showNewButton' => false,
-        ]);
-    }
-
-    public function indexAdministrativo()
-    {
-        $search = request('search');
-        $empresas = $this->empresaRepository->getAll($search);
-        $usuario = Auth::user();
-
-        return Inertia::render('administrativo/VerEmpresas', [
-            'administrativo' => [
-                'nombre' => $usuario->nombre,
-                'habilitado' => $usuario->habilitado,
-            ],
-            'empresas' => $empresas,
-            'filters' => request()->only('search'),
-            'showNewButton' => true,
         ]);
     }
 

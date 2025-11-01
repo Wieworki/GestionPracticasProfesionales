@@ -20,7 +20,7 @@ export default function Dashboard({ administrativo, mensajeBienvenida }: Props) 
         {
             title: 'Ver ofertas',
             description: 'Explorá y gestioná las ofertas de prácticas profesionales creadas en el sistema.',
-            href: '/administrativo/ofertas',
+            href: '/administrativo/ofertas/index',
             icon: <FileText className="text-blue-600 w-6 h-6" />,
         },
         {

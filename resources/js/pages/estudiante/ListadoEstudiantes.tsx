@@ -27,6 +27,7 @@ interface Props {
   filters: { search?: string };
   columns: ColumnDef<Estudiante>[];
   searchRoute: string;
+  createRoute: string;
 }
 
 export default function ListadoEstudiantes({
@@ -34,6 +35,7 @@ export default function ListadoEstudiantes({
   filters,
   columns,
   searchRoute,
+  createRoute
 }: Props) {
   const [search, setSearch] = React.useState(filters.search || '');
 
@@ -50,7 +52,6 @@ export default function ListadoEstudiantes({
 
   return (
     <div>
-      {/* Buscador */}
       <div className="flex justify-between items-center mb-4">
         <form onSubmit={handleSearch} className="flex gap-2 w-full max-w-md">
           <input
@@ -67,9 +68,14 @@ export default function ListadoEstudiantes({
             Buscar
           </button>
         </form>
-      </div>
 
-      {/* Tabla */}
+        <Link
+          href={createRoute}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Nuevo estudiante
+        </Link>
+      </div>
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full border-collapse">
           <thead className="bg-gray-50">

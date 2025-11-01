@@ -22,15 +22,18 @@ export default function VerEstudiantesAdmininistrativo({
   return (
     <AdministrativoLayout nombre={administrativo.nombre}>
       <div className="max-w-6xl mx-auto bg-white shadow rounded-xl p-8">
-        <h1 className="text-2xl font-semibold text-blue-700 mb-6">
-          Listado de estudiantes
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold text-blue-700">
+            Listado de estudiantes
+          </h1>
+        </div>
 
         <ListadoEstudiantes
           estudiantes={estudiantes}
           filters={filters}
           columns={columnasAdministrativo}
           searchRoute={route('administrativo.estudiantes.index')}
+          createRoute={route('administrativo.estudiantes.create')}
         />
       </div>
     </AdministrativoLayout>
