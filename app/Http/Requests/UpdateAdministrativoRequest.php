@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateAdministrativoRequest extends FormRequest
 {
@@ -20,7 +21,11 @@ class UpdateAdministrativoRequest extends FormRequest
         return [
             'nombre' => ['required', 'string', 'max:255'],
             'apellido' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email'],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('usuario', 'email')->ignore(auth()->id(), 'id'),
+            ],
             'dni' => ['nullable', 'string', 'max:20'],
             'telefono' => ['nullable', 'string', 'max:20'],
         ];
@@ -32,6 +37,7 @@ class UpdateAdministrativoRequest extends FormRequest
             'nombre.required' => 'Debe ingresar su nombre.',
             'apellido.required' => 'Debe ingresar su apellido.',
             'email.required' => 'Debe ingresar su email.',
+            'email.unique' => 'Este correo ya está en uso.'
         ];
     }
 }
