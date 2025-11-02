@@ -37,4 +37,11 @@ class PostulacionService
         $postulacion->update(['estado' => Postulacion::ESTADO_CONFIRMADA]);
         return $postulacion;
     }
+
+    public function anularPostulacion(int $postulacionId)
+    {
+        $postulacion = Postulacion::where('postulacion.id', $postulacionId)->first();
+        $postulacion->update(['estado' => Postulacion::ESTADO_ANULADA]);
+        return $postulacion;
+    }
 }
