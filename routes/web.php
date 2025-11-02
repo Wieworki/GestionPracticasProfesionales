@@ -19,6 +19,7 @@ use App\Http\Controllers\Estudiante\PostulacionController as PostulacionEstudian
 use App\Http\Controllers\Administrativo\PerfilController as AdministrativoPerfil;
 use App\Http\Controllers\Administrativo\EmpresaController as EmpresaAdministrativoController;
 use App\Http\Controllers\Administrativo\EstudianteController as EstudianteAdministrativoController;
+use App\Http\Controllers\Administrativo\AdministracionController as AdministracionAdministrativoController;
 use App\Http\Controllers\Administrativo\OfertaController as OfertaAdministrativoController;
 use App\Http\Controllers\Auth\PasswordController;
 
@@ -127,6 +128,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('administrativo.estudiantes.create');
         Route::post('/administrativo/estudiantes/store', [EstudianteAdministrativoController::class, 'store'])
             ->name('administrativo.estudiantes.store');
+
+        Route::get('/administrativo/administracion', [AdministracionAdministrativoController::class, 'index'])
+            ->name('administrativo.administracion.index');
+        Route::get('/administrativo/administracion/crearUsuario', [AdministrativoController::class, 'create'])
+            ->name('administrativo.administracion.crearUsuario');
+        Route::post('/administrativo/administracion/storeUsuario', [AdministrativoController::class, 'store'])
+            ->name('administrativo.administracion.storeUsuario');
     });
 
 });
