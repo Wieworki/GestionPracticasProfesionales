@@ -1,47 +1,37 @@
 import React from 'react';
-import EstudianteLayout from '@/layouts/dashboard/EstudianteLayout';
+import AdministrativoLayout from '@/layouts/dashboard/AdministrativoLayout';
 import DisabledAccountNotice from '@/components/dashboard/disabledAccountNotice';
-import WelcomeCard from '@/components/dashboard/welcomeCard';
 import { Link } from '@inertiajs/react';
-import { Building2, FileText } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 interface Props {
-    estudiante: {
+    administrativo: {
         nombre: string;
         habilitado: boolean;
     };
-    mensajeBienvenida: string;
 }
 
-export default function Dashboard({ estudiante, mensajeBienvenida }: Props) {
-    const { nombre, habilitado } = estudiante;
+export default function Dashboard({ administrativo }: Props) {
+    const { nombre, habilitado } = administrativo;
 
     const features = [
         {
-            title: 'Ver ofertas',
-            description: 'Ir al listado de ofertas de práctica profesional disponibles.',
-            href: '/estudiante/ofertas/index',
-            icon: <FileText className="text-blue-600 w-6 h-6" />,
-        },
-        {
-            title: 'Postulaciones hechas',
-            description: 'Gestion de las postulaciones hechas.',
-            href: '/estudiante/postulaciones/index',
-            icon: <Building2 className="text-blue-600 w-6 h-6" />,
-        },
+            title: 'Crear usuario administrativo',
+            description: 'Formulario de creacion de un nuevo usuario administrativo de la misma facultad.',
+            href: '/administrativo/administracion/crearUsuario',
+            icon: <Users className="text-blue-600 w-6 h-6" />,
+        }
     ];
 
     return (
-        <EstudianteLayout nombre={nombre}>
-            <div className="space-y-6">
+        <AdministrativoLayout nombre={nombre}>
+            <div className="space-y-8 animate-fadeIn">
                 {!habilitado && <DisabledAccountNotice />}
-
-                <WelcomeCard mensaje={mensajeBienvenida} />
 
                 {habilitado && (
                     <section>
                         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                            Panel de gestión
+                            Opciones de administracion
                         </h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -76,6 +66,6 @@ export default function Dashboard({ estudiante, mensajeBienvenida }: Props) {
                     </section>
                 )}
             </div>
-        </EstudianteLayout>
+        </AdministrativoLayout>
     );
 }

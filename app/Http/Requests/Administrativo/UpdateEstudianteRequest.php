@@ -27,7 +27,12 @@ class UpdateEstudianteRequest extends FormRequest
                 'email',
                 Rule::unique('usuario', 'email')->ignore($estudiante->usuario->id, 'id'),
             ],
-            'dni' => ['required', 'string', 'max:20'],
+            'dni' => [
+                'required', 
+                'string', 
+                'max:20',
+                Rule::unique('estudiante', 'dni')->ignore($estudiante->id, 'id'),
+            ],
             'telefono' => ['nullable', 'string', 'max:20'],
             'habilitado' => ['required', 'boolean'],
         ];
@@ -40,6 +45,7 @@ class UpdateEstudianteRequest extends FormRequest
             'apellido.required' => 'Debe ingresar un apellido.',
             'email.required' => 'Debe ingresar un email.',
             'dni.required' => 'Debe ingresar un DNI.',
+            'dni.unique' => 'Este DNI ya esta registrado.',
             'email.unique' => 'Este correo ya está en uso.'
         ];
     }

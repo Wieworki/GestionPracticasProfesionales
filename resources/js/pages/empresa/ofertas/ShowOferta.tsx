@@ -15,6 +15,7 @@ interface Props {
     modalidad: string;
     estado: string;
     isEditable: boolean;
+    isDeleted: boolean;
     canBeDeleted: boolean;
   };
 }
@@ -74,11 +75,13 @@ export default function ShowOferta({ empresa, oferta }: Props) {
                 </Link>
             )}
 
-            <Link href={route('empresa.ofertas.postulantes', { ofertaId: oferta.id })}>
-              <Button variant="default" className="w-full sm:w-auto">
-                Ver postulantes
-              </Button>
-            </Link>
+            {!oferta.isDeleted && (
+              <Link href={route('empresa.ofertas.postulantes', { ofertaId: oferta.id })}>
+                <Button variant="default" className="w-full sm:w-auto">
+                  Ver postulantes
+                </Button>
+              </Link>
+            )}
 
             {oferta.canBeDeleted && (
               <form onSubmit={handleDelete}>
