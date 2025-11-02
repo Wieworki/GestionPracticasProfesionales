@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\AdministrativoController;
@@ -24,22 +23,6 @@ use App\Http\Controllers\Administrativo\OfertaController as OfertaAdministrativo
 use App\Http\Controllers\Auth\PasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::get('/admin/usuario/index', [UsuarioController::class, 'index'])->name('homeUsuario');
-Route::get('/admin/usuario/create', [UsuarioController::class, 'create'])->name('createUsuario');
-Route::post('/admin/usuario/store', [UsuarioController::class, 'store'])->name('storeUsuario');
-
-Route::get('/admin/empresa/index', [EmpresaController::class, 'index'])->name('homeEmpresa');
-Route::get('/admin/empresa/create', [EmpresaController::class, 'create'])->name('createEmpresa');
-Route::post('/admin/empresa/store', [EmpresaController::class, 'store'])->name('storeEmpresa');
-
-Route::get('/admin/estudiante/index', [EstudianteController::class, 'index'])->name('homeEstudiante');
-Route::get('/admin/estudiante/create', [EstudianteController::class, 'create'])->name('createEstudiante');
-Route::post('/admin/estudiante/store', [EstudianteController::class, 'store'])->name('storeEstudiante');
-
-Route::get('/admin/administrativo/index', [AdministrativoController::class, 'index'])->name('homeAdministrativo');
-Route::get('/admin/administrativo/create', [AdministrativoController::class, 'create'])->name('createAdministrativo');
-Route::post('/admin/administrativo/store', [AdministrativoController::class, 'store'])->name('storeAdministrativo');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/password/cambiar', [PasswordController::class, 'edit'])->name('password.cambiar');

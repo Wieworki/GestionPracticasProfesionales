@@ -48,7 +48,7 @@ export default function Dashboard({ administrativo, mensajeBienvenida }: Props) 
             <div className="space-y-8 animate-fadeIn">
                 {!habilitado && <DisabledAccountNotice />}
 
-                <WelcomeCard nombreUsuario={nombre} mensaje={mensajeBienvenida} />
+                <WelcomeCard mensaje={mensajeBienvenida} />
 
                 {habilitado && (
                     <section>

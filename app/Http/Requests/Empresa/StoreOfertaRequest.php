@@ -35,6 +35,7 @@ class StoreOfertaRequest extends FormRequest
             'titulo.required' => 'Debe inidicar un titulo.',
             'descripcion.required' => 'La oferta debe tener una descripcion.',
             'fecha_cierre.required' => 'Debe indicar una fecha de cierre.',
+            'fecha_cierre.after_or_equal' => 'La fecha de cierre no puede ser anterior al dia de la fecha.',
             'modalidad.required' => 'Debe seleccionar una modalidad de trabajo.',
         ];
     }

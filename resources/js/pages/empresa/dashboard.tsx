@@ -36,7 +36,7 @@ export default function Dashboard({ empresa, mensajeBienvenida }: Props) {
             <div className="space-y-6">
                 {!habilitado && <DisabledAccountNotice />}
 
-                <WelcomeCard nombreUsuario={nombre} mensaje={mensajeBienvenida} />
+                <WelcomeCard mensaje={mensajeBienvenida} />
 
                 {habilitado && (
                     <section>

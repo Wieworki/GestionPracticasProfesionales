@@ -1,11 +1,10 @@
 import React from 'react';
 
 interface Props {
-    nombreUsuario: string;
     mensaje: string;
 }
 
-export default function WelcomeCard({ nombreUsuario, mensaje }: Props) {
+export default function WelcomeCard({ mensaje }: Props) {
     return (
         <div className="bg-white rounded-2xl shadow p-6 text-center">
             <h1 className="text-2xl font-semibold text-blue-800 mb-2">

@@ -108,6 +108,7 @@ class OfertaController extends Controller
                 'modalidad' => $oferta->modalidad,
                 'estado' => $oferta->estado,
                 'isEditable' => $oferta->canBeEdited(),
+                'isDeleted' => $oferta->isEliminada(),
                 'canBeDeleted' => $oferta->canBeDeleted()
             ],
             'empresa' => [
