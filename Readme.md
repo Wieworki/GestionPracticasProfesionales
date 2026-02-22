@@ -7,7 +7,7 @@ El proyecto consiste en un sistema de gestión web para la administración de pr
 
 ## Instalación
 
-docker-compose up --build
+Instalacion inicial: docker-compose up --build
 
 Levantamos el sistema: docker compose up -d 
 
@@ -17,7 +17,9 @@ Corremos los seeds para cargar datos iniciales: docker compose exec app php arti
 
 ## Accesos
 
-Laravel	http://localhost:8000
+Se levanta primero el sistema con docker compose up -d , y luego se puede acceder a los siguientes links
+
+Sistema en Laravel	http://localhost:8000
 
 Mailhog	http://localhost:8025
 
