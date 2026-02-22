@@ -39,7 +39,7 @@ Desde la vista del detalle de una empresa es posible acceder al listado de ofert
 
 <img width="942" height="427" alt="imagen" src="https://github.com/user-attachments/assets/c699ed94-640f-4147-bb55-09200c81489e" />
 
-Se puede acceder al listado de todas las ofertas creadas en el sistema presionando en "Ver ofertas".
+Se puede acceder al listado de todas las ofertas creadas en el sistema presionando en "Ofertas".
 Desde este listado es posible acceder al detalle individual de cada una
 
 ### Confirmar visibilidad de una oferta
